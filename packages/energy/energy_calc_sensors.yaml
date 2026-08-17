@@ -1,0 +1,54 @@
+input_number:
+  # Pricing for period: 2024/07/01 -> 2025/06/30
+  # Block 1:
+  # 0 - 100 kWh
+  # @2.7033 R/kWh
+  block_1_cost:
+    name: "Block 1 Cost Value"
+    min: 1.0
+    max: 20.0
+    unit_of_measurement: "R/kWh"
+    icon: mdi:cash
+    initial: 2.7033
+
+  # Block 2:
+  # 101 - 400 kWh
+  # @3.1637 R/kWh
+  block_2_cost:
+    name: "Block 2 Cost Value"
+    min: 1.0
+    max: 20.0
+    unit_of_measurement: "R/kWh"
+    icon: mdi:cash
+    initial: 3.1637
+
+  # Block 3:
+  # 401 - 650 kWh
+  # @3.4468 R/kWh
+  block_3_cost:
+    name: "Block 3 Cost Value"
+    min: 1.0
+    max: 20.0
+    unit_of_measurement: "R/kWh"
+    icon: mdi:cash
+    initial: 3.4468
+
+  # Block 4:
+  # > 650 kWh
+  # @3.7158 R/kWh
+  block_4_cost:
+    name: "Block 4 Cost Value"
+    min: 1.0
+    max: 20.0
+    unit_of_measurement: "R/kWh"
+    icon: mdi:cash
+    initial: 3.7158
+
+  current_utility_prepaid_reading_sp:
+    name: "Current Utility PrePaid Reading SP"
+    min: 0.0
+    max: 2000.0
+    unit_of_measurement: "kWh"
+    mode: box
+
+    

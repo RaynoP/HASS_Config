@@ -1,0 +1,238 @@
+# Core Configuration
+# https://www.home-assistant.io/docs/configuration/basic/
+homeassistant:
+  name: Home
+  latitude: !secret latitude_home
+  longitude: !secret longitude_home
+  elevation: 1462
+  unit_system: metric
+  currency: ZAR
+  country: ZA
+  time_zone: "Africa/Johannesburg"
+  #external_url: "https://www.example.com"
+  #internal_url: "http://homeassistant.local:8123"
+  packages: !include_dir_named packages
+  allowlist_external_dirs: # changed from whitelist_external_dirs to allowlist_external_dirs in 0.113.0
+    - /config/
+#http: !include includes/http.yaml
+
+# I basically make a package for home automation project and group everything about it 
+# in a folder then use !include_dir_named
+# Make files smaller by putting each automation, script and sensor in its own file and 
+# using !include_dir_merge_list
+
+
+# Loads default set of integrations. Do not remove.
+default_config:
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /www/community/lovelace-card-mod/card-mod.js
+
+# ########################################
+# ###              LOGGING             ###
+# ########################################
+logbook: !include logging/logbook.yaml
+logger: !include logging/logger.yaml
+
+# Main recorder for historical data & InfluxDB
+recorder: !include includes/recorder.yaml
+influxdb: !include includes/influxdb.yaml
+
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+automation: !include automations.yaml
+
+# Does not work to split scripts
+#script split: !include_dir_merge_list scripts
+#script: !include scripts.yaml
+script: !include_dir_merge_named scripts/.
+
+#scene: !include scenes.yaml
+
+#input_number: !include input-number.yaml
+
+
+binary_sensor:
+  - platform: ads
+    adsvar: ".stZone01Ctrl.bAutoMan"
+    name: "Irrigation Control Zone01 Auto"
+  - platform: ads
+    adsvar: ".stZone01Ctrl.bManOpen"
+    name: "Irrigation Control Zone01 ManOpen"
+  - platform: ads
+    adsvar: ".stZone01Ctrl.bOpenFeedback"
+    name: "Irrigation Control Zone01 Open Feedback"
+  - platform: ads
+    adsvar: ".stZone02Ctrl.bAutoMan"
+    name: "Irrigation Control Zone02 Auto"
+  - platform: ads
+    adsvar: ".stZone02Ctrl.bManOpen"
+    name: "Irrigation Control Zone02 ManOpen"
+  - platform: ads
+    adsvar: ".stZone02Ctrl.bOpenFeedback"
+    name: "Irrigation Control Zone02 Open Feedback"
+  - platform: ads
+    adsvar: ".stZone03Ctrl.bAutoMan"
+    name: "Irrigation Control Zone03 Auto"
+  - platform: ads
+    adsvar: ".stZone03Ctrl.bManOpen"
+    name: "Irrigation Control Zone03 ManOpen"
+  - platform: ads
+    adsvar: ".stZone03Ctrl.bOpenFeedback"
+    name: "Irrigation Control Zone03 Open Feedback"
+  - platform: ads
+    adsvar: ".stZone04Ctrl.bAutoMan"
+    name: "Irrigation Control Zone04 Auto"
+  - platform: ads
+    adsvar: ".stZone04Ctrl.bManOpen"
+    name: "Irrigation Control Zone04 ManOpen"
+  - platform: ads
+    adsvar: ".stZone04Ctrl.bOpenFeedback"
+    name: "Irrigation Control Zone04 Open Feedback"
+  - platform: ads
+    adsvar: ".stZone05Ctrl.bAutoMan"
+    name: "Irrigation Control Zone05 Auto"
+  - platform: ads
+    adsvar: ".stZone05Ctrl.bManOpen"
+    name: "Irrigation Control Zone05 ManOpen"
+  - platform: ads
+    adsvar: ".stZone05Ctrl.bOpenFeedback"
+    name: "Irrigation Control Zone05 Open Feedback"
+  - platform: ads
+    adsvar: "SprinklerControl.bRun"
+    name: "Irrigation Control Main Sequence Run"
+  - platform: ads
+    adsvar: "SprinklerControl.bMBError"
+    name: "Irrigation Control Modbus Comms Error"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOrZoneReq"
+    name: "Irrigation Control Request - Hose or Zone"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOrZoneVal"
+    name: "Irrigation Control Value - Hose or Zone "
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOrZoneRes"
+    name: "Irrigation Control Result - Hose or Zone"
+  - platform: ads
+    adsvar: "SprinklerControl.bTimeOrManReq"
+    name: "Irrigation Control Request - Time or Manual"
+  - platform: ads
+    adsvar: "SprinklerControl.bTimeOrManVal"
+    name: "Irrigation Control Value - Time or Manual"
+  - platform: ads
+    adsvar: "SprinklerControl.bTimeOrManRes"
+    name: "Irrigation Control Result - Time or Manual"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseInReq"
+    name: "Irrigation Control Request - Hose plugged in"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseInVal"
+    name: "Irrigation Control Value - Hose plugged in"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseInRes"
+    name: "Irrigation Control Result - Hose plugged in"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneOpenReq"
+    name: "Irrigation Control Request - Pool zone open"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneOpenVal"
+    name: "Irrigation Control Value - Pool zone open"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneOpenRes"
+    name: "Irrigation Control Result - Pool zone open"
+
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOutReq"
+    name: "Irrigation Control Request - Hose plugged out"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOutVal"
+    name: "Irrigation Control Value - Hose plugged out"
+  - platform: ads
+    adsvar: "SprinklerControl.bHoseOutRes"
+    name: "Irrigation Control Result - Hose plugged out"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneClosedReq"
+    name: "Irrigation Control Request - Pool zone closed"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneClosedVal"
+    name: "Irrigation Control Value - Pool zone closed"
+  - platform: ads
+    adsvar: "SprinklerControl.bPoolZoneClosedRes"
+    name: "Irrigation Control Result - Pool zone closed"
+  - platform: ads
+    adsvar: "SprinklerControl.bAutoEnabled"
+    name: "Irrigation Control Valve Auto-Automatic Enabled"
+  - platform: ads
+    adsvar: "SprinklerControl.bManualStopReq"
+    name: "Irrigation Control Manual Stop Request"
+  - platform: ads
+    adsvar: ".bRun_Pump"
+    name: "Irrigation Control Pump Running Feedback"
+  - platform: ads
+    adsvar: "SprinklerControl.bQuickHose"
+    name: "Irrigation Control Quick Hose Command"
+  - platform: ads
+    adsvar: "SprinklerControl.bQuickZone"
+    name: "Irrigation Control Quick Zone Command"
+    
+
+modbus: !include modbus.yaml
+
+sensor: !include_dir_merge_list sensors
+shell_command: !include shell_commands.yaml
+template: !include templates.yaml
+
+switch:
+  - platform: wake_on_lan
+    name: Worf-MediaPC
+    host: 10.10.0.165
+    mac: 00:19:d1:ec:1b:1f
+    turn_off:
+      service: shell_command.turn_off_remote_pc
+  - platform: template
+    switches:
+      quick_hose_status:
+        friendly_name: "Quick Hose Status"
+        unique_id: "quick_hose_status"
+        value_template: "{{ states('binary_sensor.irrigation_control_quick_hose_command') }}"
+        turn_on:
+          action: switch.turn_on
+          target: 
+            entity_id: script.set_quickhose
+        turn_off:
+          action: switch.turn_off
+          target: 
+            entity_id: script.reset_quickhose
+      quick_zone_status:
+        friendly_name: "Quick Zone Status"
+        unique_id: "quick_zone_status"
+        value_template: "{{ states('binary_sensor.irrigation_control_quick_zone_command') }}"
+        turn_on:
+          action: switch.turn_on
+          target: 
+            entity_id: script.set_quickzone
+        turn_off:
+          action: switch.turn_on
+          target: 
+            entity_id: script.reset_quickzone
+
+counter:
+  warning_counter:
+    name: Warnings
+    icon: mdi:alert
+
+# Create a helper entity
+input_boolean:
+  expand_card:
+    name: Show Stats
+    icon: mdi:chevron-down
+    initial: off
+
+
+
+    

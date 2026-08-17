@@ -1,0 +1,70 @@
+automation:
+  - alias: Update Sprinkler Runtime Time Value
+    description: ''
+    id: '1732387014265'
+    mode: single
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_number.sprinkler_control_runtime_in
+    condition:
+    - condition: template
+      value_template: "{{ trigger.to_state.state | float(0) != states('sensor.irrigation_control_runtimer_input_time') | float(0) }}"
+    actions:
+    - action: script.write_sprinkler_control_runtime_in
+      data:
+        entity_id: sensor.irrigation_control_runtimer_input_time
+        value: "{{ trigger.to_state.state | int(0) }}"
+
+  - alias: Update Sprinkler Transition Time Value
+    description: ''
+    id: '1732389528401'
+    mode: single
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_number.sprinkler_control_transition_time_in
+    condition: 
+    - condition: template
+      value_template: "{{ trigger.to_state.state | float(0) != states('sensor.irrigation_control_transition_input_time') | float(0) }}"
+    actions:
+    - action: script.write_sprinkler_control_transition_time_in
+      data:
+        entity_id: sensor.irrigation_control_transition_input_time
+        value: "{{ trigger.to_state.state | int(0) }}"
+
+  - alias: Update Sprinkler Pressurise Timer
+    description: ''
+    id: '1732389059176'
+    mode: single
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_number.sprinkler_control_pressure_time_in
+    condition: 
+    - condition: template
+      value_template: "{{ trigger.to_state.state | float(0) != states('sensor.irrigation_control_time_to_pressurise_system_time') | float(0) }}"
+    actions:
+    - action: script.write_sprinkler_control_pressure_time_in
+      data:
+        entity_id: sensor.irrigation_control_time_to_pressurise_system_time
+        value: "{{ trigger.to_state.state | int(0) }}"
+
+  - alias: Update Sprinkler Zone Offset Time
+    description: ''
+    id: '1732390069679'
+    mode: single
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_number.sprinkler_control_zoneoffset_time_in
+    condition: 
+    - condition: template
+      value_template: "{{ trigger.to_state.state | float(0) != states('sensor.irrigation_control_grass_zone_offset_time') | float(0) }}"
+    actions:
+    - action: script.write_sprinkler_control_zoneoffset_time_in
+      data:
+        entity_id: sensor.irrigation_control_grass_zone_offset_time
+        value: "{{ trigger.to_state.state | int(0) }}"
+
+

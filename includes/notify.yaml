@@ -1,0 +1,23 @@
+---
+#-
+#              _   _  __
+#  _ __   ___ | |_(_)/ _|_   _
+# | '_ \ / _ \| __| | |_| | | |
+# | | | | (_) | |_| |  _| |_| |
+# |_| |_|\___/ \__|_|_|  \__, |
+#                        |___/
+#
+#- from github.com/tinuva/home-assistant-config
+- platform: group
+  name: all_phones
+  services:
+    - service: mobile_app_mi_9t
+    - service: mobile_app_nokia_6_1
+
+## use
+# message: test slack
+# target: ["#alerts"]
+# - name: slack
+#   platform: slack
+#   api_key: !secret slack_api_key
+#   default_channel: '#general'

@@ -1,0 +1,158 @@
+template:
+  - sensor:
+    #   GSS_WDM_Runtime:    Geyser Schedule Struct: WeekDay Morning
+    - name: "GSS WDM Runtime"
+      unique_id: "BC9000-01-MB16394-GSSWDMRuntime"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[0] | int }}"
+
+    #   GSS_WDM_Hour:       Geyser Schedule Struct: WeekDay Morning
+    - name: "GSS WDM Hour"
+      unique_id: "BC9000-01-MB16395-GSSWDMHour"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[1] | int }}"
+
+    #   GSS_WDM_Minute:     Geyser Schedule Struct: WeekDay Morning
+    - name: "GSS WDM Minute"
+      unique_id: "BC9000-01-MB16396-GSSWDMMinute"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[2] | int }}"
+
+    #   GSS_WDE_Runtime:    Geyser Schedule Struct: WeekDay Evening
+    - name: "GSS WDE Runtime"
+      unique_id: "BC9000-01-MB16394-GSSWDERuntime"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[3] | int }}"
+
+    #   GSS_WDE_Hour:       Geyser Schedule Struct: WeekDay Evening
+    - name: "GSS WDE Hour"
+      unique_id: "BC9000-01-MB16394-GSSWDEHour"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[4] | int }}"
+
+    #   GSS_WDE_Minute:     Geyser Schedule Struct: WeekDay Evening
+    - name: "GSS WDE Minute"
+      unique_id: "BC9000-01-MB16394-GSSWDEMinute"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[5] | int }}"
+
+    #   GSS_WEM_Runtime:    Geyser Schedule Struct: WeekEnd Morning
+    - name: "GSS WEM Runtime"
+      unique_id: "BC9000-01-MB16394-GSSWEMRuntime"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[6] | int }}"
+
+    #   GSS_WEM_Hour:       Geyser Schedule Struct: WeekEnd Morning
+    - name: "GSS WEM Hour"
+      unique_id: "BC9000-01-MB16394-GSSWEMHour"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[7] | int }}"
+
+    #   GSS_WEM_Minute:     Geyser Schedule Struct: WeekEnd Morning
+    - name: "GSS WEM Minute"
+      unique_id: "BC9000-01-MB16394-GSSWEMMinute"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[8] | int }}"
+
+    #   GSS_WEA_Runtime:    Geyser Schedule Struct: WeekEnd Afternoon 
+    - name: "GSS WEA Runtime"
+      unique_id: "BC9000-01-MB16394-GSSWEARuntime"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[9] | int }}"
+
+    #   GSS_WEA_Hour:       Geyser Schedule Struct: WeekEnd Afternoon
+    - name: "GSS WEA Hour"
+      unique_id: "BC9000-01-MB16394-GSSWEAHour"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[10] | int }}"
+
+    #   GSS_WEA_Minute:     Geyser Schedule Struct: WeekEnd Afternoon
+    - name: "GSS WEA Minute"
+      unique_id: "BC9000-01-MB16394-GSSWEAMinute"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[11] | int }}"
+
+    #   GSS_WEE_Runtime:    Geyser Schedule Struct: WeekEnd Evening
+    - name: "GSS WEE Runtime"
+      unique_id: "BC9000-01-MB16394-GSSWEERuntime"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[12] | int }}"
+
+    #   GSS_WEE_Hour:       Geyser Schedule Struct: WeekEnd Evening
+    - name: "GSS WEE Hour"
+      unique_id: "BC9000-01-MB16394-GSSWEEHour"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[13] | int }}"
+
+    #   GSS_WEE_Minute:     Geyser Schedule Struct: WeekEnd Evening
+    - name: "GSS WEE Minute"
+      unique_id: "BC9000-01-MB16394-GSSWEEMinute"
+      state: "{{ states('sensor.geyser_schedule_struct').split(',')[14] | int }}"
+
+
+
+    # Temp to change icon colour
+    - name: "Geyser Icon Color"
+      unique_id: "geyser_icon_color"
+      state: >-
+        {% if is_state('binary_sensor.geyser_coil', 'on') %}
+          yellow
+        {% else %}
+          blue
+        {% endif %}
+
+    # Template to provide a value in the current Geyser Power
+    - name: "Geyser Current Power"
+      unique_id: "geyser_Current_power"
+      unit_of_measurement: "kW"
+      device_class: power
+      state: >
+        {% if is_state('binary_sensor.geyser_coil', 'on') %}
+          3
+        {% else %}
+          0
+        {% endif %}
+        
+    # {% set previous_minutes = this.attributes.previous_minutes | default(-1) | int %}
+    # {% set previous_minutes = state_attr('sensor.geyser_remaintime', 'last_state') | int(-1) %}
+    # {{ now().strftime('%H:%M') }}  # Force update every minute
+    - name: "Geyser Heating Active Last Minute"
+      unique_id: "geyser_heating_active_last_minute"
+      state: >
+        {% set current_minutes = states('sensor.geyser_remaintime') | int(0) %}
+        {% set previous_minutes_raw = state_attr('sensor.geyser_heating_active_last_minute', 'previous_minutes') %}
+        {% set previous_minutes = previous_minutes_raw | int(-1) if previous_minutes_raw is not none else -1 %}
+        {% if previous_minutes > current_minutes and states('binary_sensor.geyser_coil').state == 'on' %}
+          on
+        {% else %}
+          off
+        {% endif %}
+      attributes:
+        previous_minutes: "{{ states('sensor.geyser_remaintime') | int(0) }}"
+
+    # Used for Utility meter input
+    - name: "Geyser Energy Last Minute"
+      unique_id: "geyser_energy_last_minute"
+      unit_of_measurement: "kWh"
+      device_class: energy
+      state: >
+        {% if is_state('sensor.geyser_heating_active_last_minute', 'on') %}
+          0.05
+        {% else %}
+          0
+        {% endif %}
+
+    # Used for Utility meter input
+    - name: "Geyser Cost Last Minute"
+      unique_id: "geyser_cost_last_minute"
+      unit_of_measurement: "ZAR"
+      state: >
+        {% if is_state('sensor.geyser_heating_active_last_minute', 'on') %}
+          {{ ((states('sensor.energy_price') | float(0)) / 60) | round(8) * 3 }}
+        {% else %}
+          0
+        {% endif %}
+
+    - name: "Current Energy Costing"
+      unique_id: "current_energy_costing"
+      unit_of_measurement: "R"
+      state: >-
+        {{ states('sensor.geyser_used_this_month')|float(0) * states('sensor.energy_price')|float(0) }}
+
+
+automation:
+  - alias: "Update Geyser Heating Active State"
+    id: "bf5e6b8e-1051-4560-a479-58b2759ee037"
+    triggers:
+      - trigger: time_pattern
+        minutes: "*"  # Trigger every minute
+    actions:
+      - action: homeassistant.update_entity
+        target:
+          entity_id: sensor.geyser_heating_active_last_minute

@@ -1,0 +1,147 @@
+script:
+  write_gss_runtime_sp:
+    alias: "Write Geyser Runtime SP"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16386
+          value: "{{ states('input_number.gss_runtime_sp') |int }}"
+
+  write_gss_wdm_runtime:
+    alias: "Write Geyser SP WDM Runtime"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16394
+          value: "{{ states('input_number.gss_wdm_runtime_in') |int }}"
+
+  write_gss_wdm_hour:
+    alias: "Write Geyser SP WDM Hour"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16395
+          value: "{{ states('input_number.gss_wdm_hour_in') |int }}"
+
+  write_gss_wdm_minute:
+    alias: "Write Geyser SP WDM Minute"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16396
+          value: "{{ states('input_number.gss_wdm_minute_in') |int }}"
+
+  write_gss_wde_runtime:
+    alias: "Write Geyser SP WDE Runtime"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16397
+          value: "{{ states('input_number.gss_wde_runtime_in') |int }}"
+
+  write_gss_wde_hour:
+    alias: "Write Geyser SP WDE Hour"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16398
+          value: "{{ states('input_number.gss_wde_hour_in') |int }}"
+
+  write_gss_wde_minute:
+    alias: "Write Geyser SP WDE Minute"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16399
+          value: "{{ states('input_number.gss_wde_minute_in') |int }}"
+
+  write_gss_wem_runtime:
+    alias: "Write Geyser SP WEM Runtime"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16400
+          value: "{{ states('input_number.gss_wem_runtime_in') |int }}"
+
+  write_gss_wem_hour:
+    alias: "Write Geyser SP WEM Hour"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16401
+          value: "{{ states('input_number.gss_wem_hour_in') |int }}"
+
+  write_gss_wem_minute:
+    alias: "Write Geyser SP WEM Minute"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16402
+          value: "{{ states('input_number.gss_wem_minute_in') |int }}"
+
+  write_gss_wea_runtime:
+    alias: "Write Geyser SP WEA Runtime"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16403
+          value: "{{ states('input_number.gss_wea_runtime_in') |int }}"
+
+  write_gss_wea_hour:
+    alias: "Write Geyser SP WEA Hour"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16404
+          value: "{{ states('input_number.gss_wea_hour_in') |int }}"
+
+  write_gss_wea_minute:
+    alias: "Write Geyser SP WEA Minute"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16405
+          value: "{{ states('input_number.gss_wea_minute_in') |int }}"
+
+  write_gss_wee_runtime:
+    alias: "Write Geyser SP WEE Runtime"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16406
+          value: "{{ states('input_number.gss_wee_runtime_in') |int }}"
+
+  write_gss_wee_hour:
+    alias: "Write Geyser SP WEE Hour"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16407
+          value: "{{ states('input_number.gss_wee_hour_in') |int }}"
+
+  write_gss_wee_minute:
+    alias: "Write Geyser SP WEE Minute"
+    sequence:
+      - action: modbus.write_register
+        data:
+          hub: BC9000
+          address: 16408
+          value: "{{ states('input_number.gss_wee_minute_in') |int }}"
+
+
+

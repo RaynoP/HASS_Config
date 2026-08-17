@@ -1,0 +1,65 @@
+template:
+  - sensor:
+    # Energy price per kWh unit based on sliding window
+    - name: Energy Price
+      unique_id: "energy_price"
+      unit_of_measurement: "R/kWh"
+      state: >-
+        {% set value = states('sensor.energy_used_this_month')|int %}
+        {% if value < 100 %}
+          {{ states('input_number.block_1_cost')|float }}
+        {% elif value >= 101 and value <= 400 %}
+          {{ states('input_number.block_2_cost')|float }}
+        {% elif value >= 401 and value <= 650 %}
+          {{ states('input_number.block_3_cost')|float }}
+        {% elif value > 650 %}
+          {{ states('input_number.block_4_cost')|float }}
+        {% endif %}
+
+    # Rand (ZAR) value for our current energy usage
+    - name: "Current Energy Cost"
+      unique_id: "current_energy_cost"
+      unit_of_measurement: "R"
+      state: >-
+        {{ states('sensor.energy_used_this_month')|float * states('sensor.energy_price')|float }}
+
+  # Trigger based template that triggers when the sate of the entity changes
+  #    and stores the result in "Current Utility PrePaid Reading"
+  - trigger:
+      - trigger: state
+        entity_id: sensor.energy_used_this_month
+      - trigger: state
+        entity_id: input_number.current_utility_prepaid_reading_sp
+    sensor: 
+      - name: "Current Utility PrePaid Reading"
+        unique_id: "current_utility_prePaid_reading"
+        unit_of_measurement: "kWh"
+        state: >-
+          {% set current_prepaid_reading = states('sensor.current_utility_prepaid_reading') | float(0) %}
+          {% set input_prepaid_value = states('input_number.current_utility_prepaid_reading_sp') | float(0) %}
+
+          {% if trigger.entity_id == 'input_number.current_utility_prepaid_reading_sp' %}
+            {# If the input_number was just changed, set the sensor to that value #}
+            {# We compare trigger.to_state.state with the current input_prepaid_value #}
+            {# to ensure we're using the new value of the input_number #}
+            {{ input_prepaid_value | round(2) }}
+          {% elif trigger.entity_id == 'sensor.energy_used_this_month' %}
+            {# If energy_used_this_month changed, decrement the *current* prepaid reading #}
+            {# Ensure you're referencing the *previous* state of this sensor if decrementing #}
+            {{ (current_prepaid_reading - 0.1) | round(2) }}
+          {% else %}
+            {# Fallback if neither trigger matches (e.g., on Home Assistant startup) #}
+            {# You might want to initialize it from the input_number or a default #}
+            {{ current_prepaid_reading | round(2) }} 
+          {% endif %}
+
+  
+# Utility meter that measures the energy consumed by the Luxpower's grid input
+#    and reset the counter monthly
+utility_meter:
+  energy_used_this_month:
+    name: "Energy used this month"
+    unique_id: "energy_used_this_month"
+    source: sensor.lux_3113630025_power_from_grid_total
+    cycle: monthly
+

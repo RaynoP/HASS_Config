@@ -1,0 +1,44 @@
+#  _        __ _               _ _
+# (_)_ __  / _| |_   ___  ____| | |__
+# | | '_ \| |_| | | | \ \/ / _` | '_ \
+# | | | | |  _| | |_| |>  < (_| | |_) |
+# |_|_| |_|_| |_|\__,_/_/\_\__,_|_.__/
+#
+
+### Connection Setting ###
+host: !secret influx_db_hostname
+port: 8086
+database: homeassistant
+username: homeassistant
+password: !secret influx_db_user_pw
+max_retries: 3
+default_measurement: state
+ssl: false
+
+### measurements setup ###
+tags:
+  source: ha
+tags_attributes:
+  - friendly_name
+# default_measurement: units
+#exclude:
+#  entities:
+#    - zone.home
+#    - sensor.date
+#  domains:
+#    - persistent_notification
+#    - person
+#    - automation
+#    - updater
+#    - weather
+#    - sun
+
+#include:
+#  domains:
+#    - sensor
+#    - binary_sensor
+#    - sun
+#  entities:
+#    - weather.wierdapark
+
+

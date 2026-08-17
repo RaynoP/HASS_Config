@@ -1,0 +1,3 @@
+turn_off_remote_pc: "ssh -i /config/ssh_keys/id_rsa_homeassistant -o 'StrictHostKeyChecking=no' homeassistant@10.10.0.165 sudo shutdown -h now"
+
+#https://www.creatingsmarthome.com/index.php/2022/02/12/guide-start-up-and-shut-down-remote-linux-pc-using-home-assistant/

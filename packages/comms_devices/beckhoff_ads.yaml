@@ -1,0 +1,6 @@
+# CX9020 - ADS Comms
+ads:
+  device: "5.48.223.99.1.1"
+  ip_address: "10.10.4.100"
+  port: 801
+

@@ -1,0 +1,241 @@
+automation:
+  - alias: Update Geyser Runtime SP
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_runtime_sp
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.geyser_runtime_sp.state }}'
+    actions:
+    - action: script.write_gss_runtime_sp
+      data: 
+        entity_id: sensor.gss_runtime_sp
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: '1720722743735'
+
+  - alias: Update Geyser SP WDM Runtime
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wdm_runtime_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wdm_runtime.state }}'
+    actions:
+    - action: script.write_gss_wdm_runtime
+      data:
+        entity_id: sensor.gss_wdm_runtime
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: eb55a0cda4e942c194b37e5aa547e62d
+
+  - alias: Update Geyser SP WDM Hour
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wdm_hour_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wdm_hour_2.state }}'
+    actions:
+    - action: script.write_gss_wdm_hour
+      data:
+        entity_id: sensor.gss_wdm_hour_2
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: adf3b2e614784c229b5485b4abdc3aca
+
+  - alias: Update Geyser SP WDM Minute
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wdm_minute_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wdm_minute_2.state }}'
+    actions:
+    - action: script.write_gss_wdm_minute
+      data:
+        entity_id: sensor.gss_wdm_minute_2
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: c8530e0c921d4109862e6851503c3493
+
+  - alias: Update Geyser SP WDE Runtime
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wde_runtime_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wde_runtime.state }}'
+    actions:
+    - action: script.write_gss_wde_runtime
+      data:
+        entity_id: sensor.gss_wde_runtime
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: 8978d807175f474dae86ee1138ef9967
+
+  - alias: Update Geyser SP WDE Hour
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wde_hour_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wde_hour.state }}'
+    actions:
+    - action: script.write_gss_wde_hour
+      data:
+        entity_id: sensor.gss_wde_hour
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: ee3f5d00ebb049298527238fe2a120b6
+
+  - alias: Update Geyser SP WDE Minute
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wde_minute_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wde_minute.state }}'
+    actions:
+    - action: script.write_gss_wde_minute
+      data:
+        entity_id: sensor.gss_wde_minute
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: 2cb7230b62c54e048bb21f21e07e725b
+
+  - alias: Update Geyser SP WEM Runtime
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wem_runtime_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wem_runtime.state }}'
+    actions:
+    - action: script.write_gss_wem_runtime
+      data:
+        entity_id: sensor.gss_wem_runtime
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: ee54b80994d240d588ef2edb49ff4753
+
+  - alias: Update Geyser SP WEM Hour
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wem_hour_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wem_hour.state }}'
+    actions:
+    - action: script.write_gss_wem_hour
+      data:
+        entity_id: sensor.gss_wem_hour
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: cae32d0c8d05461eb9f846dd00cc2348
+
+  - alias: Update Geyser SP WEM Minute
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wem_minute_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wem_minute.state }}'
+    actions:
+    - action: script.write_gss_wem_minute
+      data:
+        entity_id: sensor.gss_wem_minute
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: 1199b78007c047f6b70210b39adea4cb
+
+  - alias: Update Geyser SP WEA Runtime
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wea_runtime_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wea_runtime.state }}'
+    actions:
+    - action: script.write_gss_wea_runtime
+      data:
+        entity_id: sensor.gss_wea_runtime
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: bf0f49b06ec449b0bbf96c229c5d9c9e
+
+  - alias: Update Geyser SP WEA Hour
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wea_hour_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wea_hour.state }}'
+    actions:
+    - action: script.write_gss_wea_hour
+      data:
+        entity_id: sensor.gss_wea_hour
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: dff3967d491340eaa685b53b8bb5467a
+
+  - alias: Update Geyser SP WEA Minute
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wea_minute_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wea_minute.state }}'
+    actions:
+    - action: script.write_gss_wea_minute
+      data:
+        entity_id: sensor.gss_wea_minute
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: fb53e698b2e84e7db1b5e727c48da619
+
+  - alias: Update Geyser SP WEE Runtime
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wee_runtime_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wee_runtime.state }}'
+    actions:
+    - action: script.write_gss_wee_runtime
+      data:
+        entity_id: sensor.gss_wee_runtime
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: 9f81c9d4419c4146b64672b718316ffb
+
+  - alias: Update Geyser SP WEE Hour
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wee_hour_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wee_hour.state }}'
+    actions:
+    - action: script.write_gss_wee_hour
+      data:
+        entity_id: sensor.gss_wee_hour
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: b83cf3372c8c4999a1733413460c771f
+
+  - alias: Update Geyser SP WEE Minute
+    triggers:
+    - trigger: state
+      entity_id: input_number.gss_wee_minute_in
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != states.sensor.gss_wee_minute.state }}'
+    actions:
+    - action: script.write_gss_wee_minute
+      data:
+        entity_id: sensor.gss_wee_minute
+        value: '{{ trigger.to_state.state }}'
+    mode: single
+    id: e3a13b71e1b84770a24ee5bd9a60c519

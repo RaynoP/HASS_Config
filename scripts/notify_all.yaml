@@ -1,0 +1,17 @@
+notify_all:
+  alias: Notify All
+  description: Notify all of devices
+  mode: single
+  fields:
+    title:
+      description: The Title of the notification
+      example: Example text
+    message:
+      description: The content
+      example: Example text
+  sequence:
+    - action: notify.mobile_app_sm_g988b_home
+      data:
+        title: '{{ title }}'
+        message: '{{ message }}'
+    

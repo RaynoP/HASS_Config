@@ -1,0 +1,21 @@
+utility_meter:
+  geyser_used_today:
+    name: "Geyser used today"
+    unique_id: "geyser_used_today"
+    source: sensor.geyser_energy_last_minute
+    cycle: daily
+  geyser_used_this_month:
+    name: "Geyser used this month"
+    unique_id: "geyser_used_this_month"
+    source: sensor.geyser_energy_last_minute
+    cycle: monthly
+  geyser_daily_cost:
+    name: "Geyser Daily Cost"
+    unique_id: "geyser_daily_cost"
+    source: sensor.geyser_cost_last_minute
+    cycle: daily
+  geyser_monthly_cost:
+    name: "Geyser Monthly Cost"
+    unique_id: "geyser_monthly_cost"
+    source: sensor.geyser_cost_last_minute
+    cycle: monthly

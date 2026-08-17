@@ -1,0 +1,55 @@
+# Example configuration.yaml entry
+#sensor:
+#  - platform: history_stats
+#    name: Lamp ON today
+#    entity_id: light.my_lamp
+#    state: "on"
+#    type: time
+#    start: "{{ today_at() }}"
+#    end: "{{ now() }}"
+
+- platform: history_stats
+  unique_id: "e7674b97-4dde-451d-ae6c-c3c8057c26bb"
+  type: time
+  name: Geyser Runtime
+  entity_id: binary_sensor.geyser_coil
+  state: "on"
+  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  unique_id: "83db7140-7a80-44ff-af52-40370e601ff6"
+  type: time
+  name: Irrigation Pump Runtime Totaliser Today
+  entity_id: binary_sensor.irrigation_control_pump_running_feedback
+  state: "on"
+  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  unique_id: "19b9a79d-2b9e-4ed4-9513-5e26362db49b"
+  type: time
+  name: Irrigation Pump Runtime Totaliser Weekly
+  entity_id: binary_sensor.irrigation_control_pump_running_feedback
+  state: "on"
+  start: "{{ today_at('00:00') - timedelta(days=now().weekday()) }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  unique_id: "987b6796-af35-4ab0-a161-31e37e260b64"
+  type: time
+  name: Irrigation Pump Runtime Totaliser Monthly
+  entity_id: binary_sensor.irrigation_control_pump_running_feedback
+  state: "on"
+  start: "{{ today_at('00:00').replace(day=1) }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  unique_id: "694e0e43-aaa4-4af1-b5a6-fcf2a969802e"
+  type: time
+  name: Irrigation Pump Runtime Totaliser All
+  entity_id: binary_sensor.irrigation_control_pump_running_feedback
+  state: "on"
+  end: "{{ now() }}"
+  duration:
+    days: 60

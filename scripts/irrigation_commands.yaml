@@ -1,0 +1,696 @@
+##  Irrigation Control 
+##    - put device in Automatic or Manual mode
+##    - Open and close in Manual mode
+##    - Start and Stop Sequences
+##    - 
+##    - 
+##    Written By: Rayno Powell
+##    Date 2023/12/03
+
+## Zone01 - Automatic and Manual mode
+write_irrigation_zone01_auto_on:
+  alias: "Write Zone01 Auto On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone01Ctrl.bAutoMan
+      adstype: bool
+      value: 1
+
+write_irrigation_zone01_auto_off:
+  alias: "Write Zone01 Auto Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone01Ctrl.bAutoMan
+      adstype: bool
+      value: 0
+
+## Zone01 - Manual mode Open and Close
+write_irrigation_zone01_manopen_on:
+  alias: "Write Zone01 Manual Open On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone01Ctrl.bManOpen
+      adstype: bool
+      value: 1
+
+write_irrigation_zone01_manopen_off:
+  alias: "Write Zone01 Manual Open Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone01Ctrl.bManOpen
+      adstype: bool
+      value: 0
+###########################################################
+
+## Zone02 - Automatic and Manual mode
+write_irrigation_zone02_auto_on:
+  alias: "Write Zone02 Auto On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone02Ctrl.bAutoMan
+      adstype: bool
+      value: 1
+
+write_irrigation_zone02_auto_off:
+  alias: "Write Zone02 Auto Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone02Ctrl.bAutoMan
+      adstype: bool
+      value: 0
+
+## Zone02 - Manual mode Open and Close
+write_irrigation_zone02_manopen_on:
+  alias: "Write Zone02 Manual Open On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone02Ctrl.bManOpen
+      adstype: bool
+      value: 1
+
+write_irrigation_zone02_manopen_off:
+  alias: "Write Zone02 Manual Open Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone02Ctrl.bManOpen
+      adstype: bool
+      value: 0
+###########################################################
+
+## Zone03 - Automatic and Manual mode
+write_irrigation_zone03_auto_on:
+  alias: "Write Zone03 Auto On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone03Ctrl.bAutoMan
+      adstype: bool
+      value: 1
+
+write_irrigation_zone03_auto_off:
+  alias: "Write Zone03 Auto Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone03Ctrl.bAutoMan
+      adstype: bool
+      value: 0
+
+## Zone03 - Manual mode Open and Close
+write_irrigation_zone03_manopen_on:
+  alias: "Write Zone03 Manual Open On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone03Ctrl.bManOpen
+      adstype: bool
+      value: 1
+
+write_irrigation_zone03_manopen_off:
+  alias: "Write Zone03 Manual Open Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone03Ctrl.bManOpen
+      adstype: bool
+      value: 0
+###########################################################
+
+## Zone04 - Automatic and Manual mode
+write_irrigation_zone04_auto_on:
+  alias: "Write Zone04 Auto On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone04Ctrl.bAutoMan
+      adstype: bool
+      value: 1
+
+write_irrigation_zone04_auto_off:
+  alias: "Write Zone04 Auto Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone04Ctrl.bAutoMan
+      adstype: bool
+      value: 0
+
+## Zone04 - Manual mode Open and Close
+write_irrigation_zone04_manopen_on:
+  alias: "Write Zone04 Manual Open On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone04Ctrl.bManOpen
+      adstype: bool
+      value: 1
+
+write_irrigation_zone04_manopen_off:
+  alias: "Write Zone04 Manual Open Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone04Ctrl.bManOpen
+      adstype: bool
+      value: 0
+###########################################################
+
+## Zone05 - Automatic and Manual mode
+write_irrigation_zone05_auto_on:
+  alias: "Write Zone05 Auto On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone05Ctrl.bAutoMan
+      adstype: bool
+      value: 1
+
+write_irrigation_zone05_auto_off:
+  alias: "Write Zone05 Auto Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone05Ctrl.bAutoMan
+      adstype: bool
+      value: 0
+
+## Zone05 - Manual mode Open and Close
+write_irrigation_zone05_manopen_on:
+  alias: "Write Zone05 Manual Open On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone05Ctrl.bManOpen
+      adstype: bool
+      value: 1
+
+write_irrigation_zone05_manopen_off:
+  alias: "Write Zone05 Manual Open Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: .stZone05Ctrl.bManOpen
+      adstype: bool
+      value: 0
+###########################################################
+
+## Start and Stop the Main Running Sequence
+write_irrigation_run_main_seq_on:
+  alias: "Write Run Main Sequence On"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bRun
+      adstype: bool
+      value: 1
+
+write_irrigation_run_main_seq_off:
+  alias: "Write Run Main Sequence Off"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bRun
+      adstype: bool
+      value: 0
+###########################################################
+
+flip_hose_or_zone:
+  alias: "Hose or Zone"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_hose_or_zone
+          state: "off"
+      then:
+        - action: script.set_irrigation_hose_or_zone
+      else:
+        - action: script.reset_irrigation_hose_or_zone
+
+## Set the HoseOrZoneVal to TRUE
+set_irrigation_hose_or_zone:
+  alias: "Set Hose or Zone"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOrZoneVal
+      adstype: bool
+      value: 1
+
+## Set the HoseOrZoneVal to FALSE
+reset_irrigation_hose_or_zone:
+  alias: "Reset Hose or Zone"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOrZoneVal
+      adstype: bool
+      value: 0
+
+## Write HoseOrZoneVal response
+write_irrigation_hose_or_zone_response:
+  alias: "Write Hose or Zone response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOrZoneRes
+      adstype: bool
+      value: 1
+###########################################################
+
+flip_quickhose:
+  alias: "Flip Quick Hose"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_quick_hose_command
+          state: "off"
+      then:
+        - action: script.set_quickhose
+      else:
+        - action: script.reset_quickhose
+
+## Set the bQuickHose to TRUE
+set_quickhose:
+  alias: "Set Quick Hose"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bQuickHose
+      adstype: bool
+      value: 1
+
+## Set the bQuickHose to FALSE
+reset_quickhose:
+  alias: "Reset Quick Hose"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bQuickHose
+      adstype: bool
+      value: 0
+###########################################################
+
+flip_quickzone:
+  alias: "Flip Quick Zone"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_quick_zone_command
+          state: "off"
+      then:
+        - action: script.set_quickzone
+      else:
+        - action: script.reset_quickzone
+
+## Set the bQuickZone to TRUE
+set_quickzone:
+  alias: "Set Quick Zone"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bQuickZone
+      adstype: bool
+      value: 1
+
+## Set the bQuickZone to FALSE
+reset_quickzone:
+  alias: "Reset Quick Zone"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bQuickZone
+      adstype: bool
+      value: 0
+###########################################################
+
+flip_time_or_man:
+  alias: "Time or Manual"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_time_or_manual
+          state: "off"
+      then:
+        - action: script.set_irrigation_time_or_man
+      else:
+        - action: script.reset_irrigation_time_or_man
+
+## Set the TimeOrManualVal to TRUE
+set_irrigation_time_or_man:
+  alias: "Set Time or Manual"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bTimeOrManVal
+      adstype: bool
+      value: 1
+
+## Set the TimeOrManualVal to FALSE
+reset_irrigation_time_or_man:
+  alias: "Reset Time or Manual"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bTimeOrManVal
+      adstype: bool
+      value: 0
+
+## Write TimeOrManualVal response
+write_irrigation_time_or_man_response:
+  alias: "Write Time or Manual response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bTimeOrManRes
+      adstype: bool
+      value: 1
+###########################################################
+
+flip_hose_in:
+  alias: "Hose In"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_hose_plugged_in
+          state: "off"
+      then:
+        - action: script.set_irrigation_hose_in
+      else:
+        - action: script.reset_irrigation_hose_in
+
+## Set the HoseInVal to TRUE
+set_irrigation_hose_in:
+  alias: "Set Hose In"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseInVal
+      adstype: bool
+      value: 1
+
+## Set the HoseInVal to FALSE
+reset_irrigation_hose_in:
+  alias: "Reset Hose In"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseInVal
+      adstype: bool
+      value: 0
+
+## Write HoseInVal response
+write_irrigation_hose_in_response:
+  alias: "Write Hose In response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseInRes
+      adstype: bool
+      value: 1
+###########################################################
+
+flip_hose_out:
+  alias: "Hose Out"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_hose_plugged_out
+          state: "off"
+      then:
+        - action: script.set_irrigation_hose_out
+      else:
+        - action: script.reset_irrigation_hose_out
+
+## Set the HoseOutVal to TRUE
+set_irrigation_hose_out:
+  alias: "Set Hose Out"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOutVal
+      adstype: bool
+      value: 1
+
+## Set the HoseOutVal to FALSE
+reset_irrigation_hose_out:
+  alias: "Reset Hose Out"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOutVal
+      adstype: bool
+      value: 0
+
+## Write HoseOutVal response
+write_irrigation_hose_out_response:
+  alias: "Write Hose Out response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bHoseOutRes
+      adstype: bool
+      value: 1
+###########################################################
+
+flip_pool_zone_open:
+  alias: "Pool Zone Open"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_pool_zone_open
+          state: "off"
+      then:
+        - action: script.set_irrigation_pool_zone_open
+      else:
+        - action: script.reset_irrigation_pool_zone_open
+
+## Set the PoolZoneOpenVal to TRUE
+set_irrigation_pool_zone_open:
+  alias: "Set Pool Zone Open"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneOpenVal
+      adstype: bool
+      value: 1
+
+## Set the PoolZoneOpenVal to FALSE
+reset_irrigation_pool_zone_open:
+  alias: "Reset Pool Zone Open"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneOpenVal
+      adstype: bool
+      value: 0
+
+## Write PoolZoneOpenVal response
+write_irrigation_pool_zone_open_response:
+  alias: "Write Pool Zone Open response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneOpenRes
+      adstype: bool
+      value: 1
+###########################################################
+
+flip_pool_zone_closed:
+  alias: "Pool Zone Closed"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_value_pool_zone_closed
+          state: "off"
+      then:
+        - action: script.set_irrigation_pool_zone_closed
+      else:
+        - action: script.reset_irrigation_pool_zone_closed
+
+## Set the PoolZoneClosedVal to TRUE
+set_irrigation_pool_zone_closed:
+  alias: "Set Pool Zone Closed"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneClosedVal
+      adstype: bool
+      value: 1
+
+## Set the PoolZoneClosedVal to FALSE
+reset_irrigation_pool_zone_closed:
+  alias: "Reset Pool Zone Closed"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneClosedVal
+      adstype: bool
+      value: 0
+
+## Write PoolZoneClosedVal response
+write_irrigation_pool_zone_closed_response:
+  alias: "Write Pool Zone Clsoed response"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bPoolZoneClosedRes
+      adstype: bool
+      value: 1
+###########################################################
+
+write_sprinkler_control_runtime_in:
+  alias: "Write Runtime Value"
+  sequence:
+    action: ads.write_data_by_name
+    data:
+      adsvar: SprinklerControl.nTimeIn
+      adstype: int
+      value: "{{ value | default(states('input_number.sprinkler_control_runtime_in')) | int(18) }}"
+#    action: ads.write_data_by_name
+#    target: {}
+#    data:
+#      adsvar: SprinklerControl.nTimeIn
+#      adstype: int
+#      value: "{{ states('input_number.sprinkler_control_runtime_in') |int }}"
+###########################################################
+
+write_sprinkler_control_transition_time_in:
+  alias: "Write Transition Time Value"
+  sequence:
+    action: ads.write_data_by_name
+    data:
+      adsvar: SprinklerControl.nTransitionTimeIn
+      adstype: int
+      value: "{{  value | default(states('input_number.sprinkler_control_transition_time_in')) | int(18) }}"
+#    action: ads.write_data_by_name
+#    target: {}
+#    data:
+#      adsvar: SprinklerControl.nTransitionTimeIn
+#      adstype: int
+#      value: "{{ states('input_number.sprinkler_control_transition_time_in') |int }}"
+###########################################################
+
+write_sprinkler_control_pressure_time_in:
+  alias: "Write Pressurise Time Value"
+  sequence:
+    action: ads.write_data_by_name
+    data:
+      adsvar: SprinklerControl.nPressureTimeIn
+      adstype: int
+      value: "{{ value | default(states('input_number.sprinkler_control_pressure_time_in')) | int(18) }}"
+#    target: {}
+#    data:
+#      adsvar: SprinklerControl.nPressureTimeIn
+#      adstype: int
+#      value: "{{ states('input_number.sprinkler_control_pressure_time_in') |int }}"
+###########################################################
+
+write_sprinkler_control_zoneoffset_time_in:
+  alias: "Write Transition Time Value"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.nZoneOffsetTimeIn
+      adstype: int
+      value: "{{ value | default(states('input_number.sprinkler_control_zoneoffset_time_in')) | int(18) }}"
+###########################################################
+
+flip_auto_enabled:
+  alias: "Auto Enabled Flip"
+  sequence:
+    - if:
+        - condition: state
+          entity_id: binary_sensor.irrigation_control_valve_auto_automatic_enabled
+          state: "off"
+      then:
+        - action: script.set_sprinkler_control_auto_enabled
+      else:
+        - action: script.reset_sprinkler_control_auto_enabled
+
+set_sprinkler_control_auto_enabled:
+  alias: "Set AutoEnabled"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bAutoEnabled
+      adstype: bool
+      value: 1
+
+reset_sprinkler_control_auto_enabled:
+  alias: "reset AutoEnabled"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bAutoEnabled
+      adstype: bool
+      value: 0
+###########################################################
+
+write_sprinkler_control_manual_stop_request:
+  alias: "Write Manual stop request"
+  sequence:
+    action: ads.write_data_by_name
+    target: {}
+    data:
+      adsvar: SprinklerControl.bManualStopReq
+      adstype: bool
+      value: 1
+
+
+
+

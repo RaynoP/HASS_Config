@@ -1,0 +1,96 @@
+input_number:
+  gss_runtime_sp:
+    name: "GSS Runtime SP"
+    min: 0
+    max: 120
+    step: 1
+    
+  gss_wdm_runtime_in:
+    name: "GSS WDM Runtime Input Number"
+    min: 0
+    max: 120
+    step: 1
+
+  gss_wdm_hour_in:
+    name: "GSS WDM Hour Input Number"
+    min: 0
+    max: 24
+    step: 1
+
+  gss_wdm_minute_in:
+    name: "GSS WDM Minute Input Number"
+    min: 0
+    max: 60
+    step: 1
+
+  gss_wde_runtime_in:
+    name: "GSS WDE Runtime Input Number"
+    min: 0
+    max: 120
+    step: 1
+
+  gss_wde_hour_in:
+    name: "GSS WDE Hour Input Number"
+    min: 0
+    max: 24
+    step: 1
+
+  gss_wde_minute_in:
+    name: "GSS WDE Minute Input Number"
+    min: 0
+    max: 60
+    step: 1
+
+  gss_wem_runtime_in:
+    name: "GSS WEM Runtime Input Number"
+    min: 0
+    max: 120
+    step: 1
+
+  gss_wem_hour_in:
+    name: "GSS WEM Hour Input Number"
+    min: 0
+    max: 24
+    step: 1
+
+  gss_wem_minute_in:
+    name: "GSS WEM Minute Input Number"
+    min: 0
+    max: 60
+    step: 1
+
+  gss_wea_runtime_in:
+    name: "GSS WEA Runtime Input Number"
+    min: 0
+    max: 120
+    step: 1
+
+  gss_wea_hour_in:
+    name: "GSS WEA Hour Input Number"
+    min: 0
+    max: 24
+    step: 1
+
+  gss_wea_minute_in:
+    name: "GSS WEA Minute Input Number"
+    min: 0
+    max: 60
+    step: 1
+
+  gss_wee_runtime_in:
+    name: "GSS WEE Runtime Input Number"
+    min: 0
+    max: 120
+    step: 1
+
+  gss_wee_hour_in:
+    name: "GSS WEE Hour Input Number"
+    min: 0
+    max: 24
+    step: 1
+
+  gss_wee_minute_in:
+    name: "GSS WEE Minute Input Number"
+    min: 0
+    max: 60
+    step: 1

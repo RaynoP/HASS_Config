@@ -1,0 +1,65 @@
+---
+############################################################################
+#
+# Log Severities: notset, debug, info, warn, warning, error, fatal, critical
+#
+############################################################################
+
+default: error
+logs:
+  root: warn
+  #root: debug
+
+  custom_components.hacs: error
+  hacs: error
+  
+  homeassistant: error
+  homeassistant.core: info
+  homeassistant.config: debug
+  homeassistant.config_entries: error
+  homeassistant.helpers.entity: error
+  homeassistant.helpers.script: debug
+  homeassistant.helpers.script.websocket_api_script: warning
+  homeassistant.loader: error
+  homeassistant.exceptions: info
+
+  #homeassistant.components.api: error
+  homeassistant.components.automation: warn
+  #homeassistant.components.binary_sensor: debug
+  #homeassistant.components.camera: debug
+  homeassistant.components.climate.nest: warn
+  homeassistant.components.device_tracker: warn
+  homeassistant.components.discovery: warn
+  #homeassistant.components.ffmpeg: debug
+  #homeassistant.components.hassio: debug
+  #homeassistant.components.http: error
+  #homeassistant.components.influxdb: debug
+  #homeassistant.components.light: warn
+  #homeassistant.components.media_player: debug
+  
+  homeassistant.components.modbus: debug
+  pymodbus: debug
+  homeassistant.components.ads: debug
+  custom_components.ads: debug
+  
+  #homeassistant.components.mqtt: debug
+  #homeassistant.components.notify: error
+  #homeassistant.component.opentherm_gw: debug
+  homeassistant.components.python_script: warning
+  homeassistant.components.rest: debug
+  homeassistant.components.sensor: fatal
+  homeassistant.components.shell_command: warning
+  homeassistant.components.speedtestdotnet: fatal
+  #homeassistant.components.ssdp: debug
+  #homeassistant.components.synology_dsm: debug
+  #homeassistant.components.telegram: error
+  #homeassistant.components.utility_meter: debug
+  #homeassistant.components.websocket_api: error
+  #homeassistant.components.weather: debug
+  #homeassistant.components.zeroconf: debug
+  
+  #custom_components.load_shedding: error  # ESP integration
+
+  aiohttp.server: fatal
+  #pychromecast.socket_client: fatal
+  #plexwebsocket: fatal

@@ -1,0 +1,187 @@
+- id: '1681486097359'
+  alias: Notify Loadshitting - 30mins
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id: sensor.minutes_to_next_loadshedding
+    below: 30
+  condition: []
+  actions:
+  - action: script.notify_all
+    data:
+      title: Loadshitting Alert!
+      message: Loadshitting starting in less than 30 minutes!!!
+  mode: single
+- id: '1681843257220'
+  alias: Notify Loadshitting Geyser On Reminder
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.minutes_to_next_loadshedding
+    below: 120
+  conditions:
+  - condition: and
+    conditions:
+    - condition: sun
+      before: sunset
+      after: sunrise
+    - condition: time
+      after: '16:00:00'
+      weekday:
+      - sat
+      - fri
+      - thu
+      - wed
+      - tue
+      - mon
+      - sun
+  actions:
+  - data:
+      message: 'Loadshitting starting. Geyser on? '
+    action: notify.mobile_app_sm_n950f
+  mode: single
+- id: '1694457709726'
+  alias: Control Loadshitting Geyser Switch On
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.minutes_to_next_loadshedding
+    below: 60
+  condition:
+  - condition: or
+    conditions:
+    - condition: time
+      after: 02:00:00
+      before: 02:10:00
+    - condition: time
+      after: 03:00:00
+      before: 03:10:00
+    - condition: time
+      after: '17:00:00'
+      before: '17:10:00'
+  actions:
+  - action: homeassistant.turn_on
+    data: {}
+    target:
+      entity_id: switch.geyser_on_req
+  mode: single
+- id: 926ece1110424c7bbdddc8c6bfb41077
+  alias: Count warnings
+  description: ''
+  triggers:
+  - event_type: system_log_event
+    event_data:
+      level: WARNING
+    trigger: event
+  conditions: []
+  actions:
+  - action: counter.increment
+    target:
+      entity_id: counter.warning_counter
+    data: {}
+- id: '1704825881003'
+  alias: Notify Loadshitting - 2hrs
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.minutes_to_next_loadshedding
+    below: 120
+  conditions: []
+  actions:
+  - action: script.notify_all
+    data:
+      title: Loadshitting Alert!
+      message: Loadshitting starting in 2 hours.
+  mode: single
+- id: '1746116124521'
+  alias: LUX Refresh Interval
+  description: ''
+  use_blueprint:
+    path: guybw/refresh_interval.yaml
+    input:
+      luxpower_device: d29fdf00675b7e99bf500fefcae24641
+      luxpower_refresh_time: /59
+- id: '1746211333273'
+  alias: Subtract Current Prepaid Value
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.energy_used_this_month
+    from:
+    to:
+  conditions:
+  - condition: template
+    value_template: '{{ trigger.to_state.state != states.sensor.energy_used_this_month.state
+      }}'
+    enabled: false
+  actions:
+  - action: notify.mobile_app_sm_g988b_home
+    metadata: {}
+    data:
+      message: Energy updated, {{ states('sensor.energy_used_this_month') }} kWh used.
+    enabled: false
+  - action: number.set_value
+    metadata: {}
+    data:
+      value: '{{ states(''input_number.current_utility_prepaid_reading'') | float
+        - 0.1 }}'
+    target:
+      entity_id: input_number.current_utility_prepaid_reading_sp
+    enabled: false
+  mode: single
+- id: '1747381418455'
+  alias: Calender Switch on Irrigation
+  description: ''
+  triggers:
+  - trigger: calendar
+    entity_id: calendar.rayno_powell_gmail_com
+    event: start
+    offset: 0:0:0
+  conditions:
+  - condition: template
+    value_template: '{{ trigger.calendar_event.title | regex_match(''Irrigation -
+      \\d+'') }}'
+  actions:
+  - action: input_number.set_value
+    target:
+      entity_id: input_number.sprinkler_control_runtime_in
+    data:
+      value: '{{ trigger.calendar_event.title.split('' - '')[1] | int }}'
+  - action: script.write_sprinkler_control_runtime_in
+    data: {}  
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: binary_sensor.irrigation_main_sequence_run
+  - action: script.write_irrigation_hose_or_zone_response
+    data: {}
+  - action: script.write_irrigation_hose_out_response
+    data: {}
+  mode: single
+- id: '1750525750360'
+  alias: Prompt for Utility Meter Reading
+  description: Sends a notification twice daily to record utility meter reading.
+  triggers:
+  - at: 06:00:00
+    trigger: time
+  - at: '18:00:00'
+    trigger: time
+  actions:
+  - action: notify.mobile_app_sm_g988b_home
+    data:
+      message: Time to record your current utility meter reading.
+      title: Utility Reading Time!
+      data:
+        tag: utility_meter_reading_{{ now().timestamp() }}
+        actions:
+        - action: URI
+          title: Enter Reading Now
+          uri: /dashboard-luxpower/raw-value-update
+        - action: REMINDER_DISMISS
+          title: Dismiss
+

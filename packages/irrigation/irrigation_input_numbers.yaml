@@ -1,0 +1,25 @@
+input_number:
+  sprinkler_control_runtime_in:
+    name: "Sprinkler Control Runtime Time Value"
+    min: 1
+    max: 120
+    step: 1
+
+  sprinkler_control_transition_time_in:
+    name: "Sprinkler Control Transition Time Value"
+    min: 1
+    max: 40
+    step: 1
+
+  sprinkler_control_pressure_time_in:
+    name: "Sprinkler Control Pressurise System Time Value"
+    min: 1
+    max: 120
+    step: 1
+
+  sprinkler_control_zoneoffset_time_in:
+    name: "Sprinkler Control Zone Offset Time Value"
+    min: 1
+    max: 40
+    step: 1
+

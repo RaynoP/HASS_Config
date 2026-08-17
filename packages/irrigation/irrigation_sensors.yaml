@@ -1,0 +1,49 @@
+sensor:
+  - platform: ads
+    adsvar: SprinklerControl.nSeq
+    name: "Irrigation Control Sequence Value"
+    adstype: int
+    
+  - platform: ads
+    adsvar: SprinklerControl.nMBSeq
+    name: "Irrigation Control Modbus Sequence Value"
+    adstype: int
+
+  - platform: ads
+    adsvar: SprinklerControl.nMBErrorCounter
+    name: "Irrigation Control Modbus Error Counter"
+    adstype: int
+
+
+  - platform: ads
+    adsvar: SprinklerControl.nTimeIn
+    name: "Irrigation Control Runtimer Input Time"
+    adstype: int
+
+  - platform: ads
+    adsvar: SprinklerControl.nTransitionTimeIn
+    name: "Irrigation Control Transition Input Time"
+    adstype: int
+
+  - platform: ads
+    adsvar: SprinklerControl.nPressureTimeIn
+    name: "Irrigation Control Time to Pressurise System Input Time"
+    adstype: int
+
+  - platform: ads
+    adsvar: SprinklerControl.nZoneOffsetTimeIn
+    name: "Irrigation Control Zone Offset Input Time"
+    adstype: int
+
+
+  - platform: ads
+    adsvar: SprinklerControl.nElapsedTime
+    name: "Irrigation Control Runtimer Elapsed Time"
+    adstype: int
+    unit_of_measurement: "Min"
+
+  - platform: ads
+    adsvar: SprinklerControl.nElapsedTimeSec
+    name: "Irrigation Control Runtimer Elapsed Seconds Time"
+    adstype: int
+    unit_of_measurement: "Sec"

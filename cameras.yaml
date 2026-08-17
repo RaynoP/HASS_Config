@@ -1,0 +1,42 @@
+#  - platform: generic
+#    name: Gate
+#    still_image_url: 'http://10.10.0.33/ISAPI/Streaming/channels/101/picture'
+#    username: admin
+#    password: Pa$$w0rd
+#    stream_source: 'rtsp://admin:Pa$$w0rd@10.10.0.33:554/Streaming/channels/102'
+#    authentication: digest
+
+#  - platform: generic
+#    name: Gerage
+#    still_image_url: 'http://10.10.0.33/ISAPI/Streaming/channels/201/picture'
+#    username: admin
+#    password: Pa$$w0rd
+#    stream_source: 'rtsp://admin:Pa$$w0rd@10.10.0.33:554/Streaming/channels/202'
+#    authentication: digest
+
+#  - platform: generic
+#    name: Junction
+#    still_image_url: 'http://10.10.0.33/ISAPI/Streaming/channels/301/picture'
+#    username: admin
+#    password: Pa$$w0rd
+#    stream_source: 'rtsp://admin:Pa$$w0rd@10.10.0.33:554/Streaming/channels/302'
+#    authentication: digest
+
+#  - platform: generic
+#    name: Entertainment
+#    still_image_url: 'http://10.10.0.33/ISAPI/Streaming/channels/401/picture'
+#    username: admin
+#    password: Pa$$w0rd
+#    stream_source: 'rtsp://admin:Pa$$w0rd@10.10.0.33:554/Streaming/channels/402'
+#    authentication: digest
+
+#  - platform: hikvision
+#    host: 10.10.0.33
+#    username: admin
+#    password: Pa$$w0rd
+#    name: DVR
+#    channels:
+#      - 1
+#      - 2
+#      - 3
+#      - 4

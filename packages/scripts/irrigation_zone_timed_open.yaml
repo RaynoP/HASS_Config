@@ -1,0 +1,55 @@
+input_number:
+  sprinkler_delay:
+    min: 0
+    max: 100
+    step: 1
+
+
+script:
+  timed_zone_open:
+    sequence:
+      - action: ads.write_data_by_name
+        target: {}
+        data:
+          adsvar: .stZone01Ctrl.bAutoMan
+          adstype: bool
+          value: 0
+      - action: ads.write_data_by_name
+        target: {}
+        data:
+          adsvar: .stZone01Ctrl.bManOpen
+          adstype: bool
+          value: 1
+      - delay:
+        #hours: 0
+        #minutes: 0
+          seconds: "{{ seconds | float }}" #"{{ states('input_number.sprinkler_delay') | int }}"
+        #milliseconds: 0
+      - action: ads.write_data_by_name
+        target: {}
+        data:
+          adsvar: .stZone01Ctrl.bManOpen
+          adstype: bool
+          value: 0
+    fields:
+      seconds:
+        name: seconds
+        description: "The amount of time to wait"
+        selector:
+          number:
+            min: 0
+            max: 60
+            step: 1
+            unit_of_measurement: seconds
+            mode: slider
+#      - choose:
+#        - conditions:
+#          - condition: state
+#            entity_id: input_boolean.sprinkler_override
+#            state: "on"
+#          sequence:
+#            - service: notify.mobile_app
+#              data:
+#                message: "Sprinkler override is active."
+
+

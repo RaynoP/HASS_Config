@@ -1,0 +1,177 @@
+automation:
+#  - id: '1681401519781'
+#    alias: Notify Geyser Coil On
+#    description: ''
+#    triggers:
+#    - trigger: state
+#      entity_id:
+#      - binary_sensor.geyser_coil
+#      from: 'off'
+#      to: 'on'
+#    condition: []
+#    action:
+#    - action: script.notify_all
+#      data:
+#        title: Geyser
+#        message: "Coil On {{ now().strftime('%H:%M') }} "
+#    mode: single
+  - id: '1746728146729'
+    alias: Energy Grid Off Notify
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+      - sensor.lux_3113630025_grid_voltage_live
+      below: 210
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: Grid Power
+        message: "AC Voltage dropped away at {{ now().strftime('%H:%M') }} "
+    mode: single
+
+  - id: '1746729203590'
+    alias: Energy Grid On Notify
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+      - sensor.lux_3113630025_grid_voltage_live
+      above: 200
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: Grid Power
+        message: "AC Voltage restored at {{ now().strftime('%H:%M') }}. Line voltage is {{ states('sensor.lux_3113630025_grid_voltage_live') }} VAC. "
+    mode: single
+
+  - id: '1746728686917'
+    alias: Energy Grid Battery Voltage Warn
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.lux_3113630025_battery_voltage_live
+      below: 47
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: Battery Voltage Warning
+        message: "Battery Voltage fell below 47V at {{ now().strftime('%H:%M') }} "
+    mode: single
+
+  - id: '1746729021682'
+    alias: Energy Grid Battery Voltage Critical
+    description: ''
+    triggers:
+    - trigger: numeric_state 
+      entity_id: []
+      below: 46.5
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: Battery Voltage Critical
+        message: "Battery Voltage fell below 46.5V at {{ now().strftime('%H:%M') }} "
+    mode: single
+
+  - id: '1747506480515'
+    alias: Energy Notify Prepaid Low - 25
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 25
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "Prepaid Units Alert!!!"
+        message: 'Prepaid units fell below 25.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+  - id: '1750527905065'
+    alias: Energy Notify Prepaid Low - 20
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 20
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "Prepaid Units Alert!!!"
+        message: 'Prepaid units fell below 20.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+  - id: '1750527920303'
+    alias: Energy Notify Prepaid Low - 15
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 15
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "Prepaid Units Alert!!!"
+        message: 'Prepaid units fell below 15.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+  - id: '1750527934630'
+    alias: Energy Notify Prepaid Low - 10
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 10
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "Prepaid Units Alert!!!"
+        message: 'Prepaid units fell below 10.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+  - id: '1750527948434'
+    alias: Energy Notify Prepaid Low - 5
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 5
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "!!!! Prepaid Units Alert !!!!"
+        message: 'Prepaid units fell below 5.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+  - id: '1750527962146'
+    alias: Energy Notify Prepaid Low - 1
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+        - sensor.current_utility_prepaid_reading
+      below: 1
+    conditions: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: "!!!! Prepaid Units Alert !!!!"
+        message: 'Prepaid units fell below 25.0 {{ now().strftime(''%H:%M'') }} '
+    mode: single
+
+    

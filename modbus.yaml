@@ -1,0 +1,128 @@
+# ************************************************************
+# Created by: Rayno Powell
+#       Date: 20230625
+#    Purpose: Modbus protocol device descriptor file
+#   Revision: 0.1
+#    Remarks: Initial version:
+#               1. Bit writes for Geysor ON/OFF control
+#               2. Sructure read for polling optimisation
+#
+#
+# Modbus device ID structure:
+# AAAAAA-NN-PRXXXXX-Tagname
+#   AAAAAA  -> Device name: BC9000 / CX9020
+#   NN      -> Unique serialised ID
+#   PRXXXXX -> PR:    Protocol
+#                       MB - Modbus
+#                       AD - ADS
+#              XXXXX: Register number
+#   Tagname -> Shortened Tagname 
+#               Tagname remains short as "name: " provides
+#               a more human readable name in CamelCase
+#
+
+- name: "BC9000"
+  type: tcp
+  host: 10.10.4.50
+  port: 502
+  delay: 2
+  message_wait_milliseconds: 30
+  #  timeout: 10 Setting causes log noise 2024/01/01
+
+  binary_sensors:
+    - name: "Geyser Coil"
+      unique_id: "BC9000-01-MB16385-GeyserCoil"
+      address: 16385
+      scan_interval: 5
+      input_type: holding
+  switches:
+    - name: "Geyser On Req"
+      unique_id: "BC9000-01-MB16384-GeyserOnReq"
+      address: 16384
+      scan_interval: 5
+      write_type: holding
+      command_on: 1
+      command_off: 0
+      verify:
+        input_type: holding
+        address: 16384
+        state_on: 1
+        state_off: 0
+    - name: "Geyser Off Req"
+      unique_id: "BC9000-01-MB16384-GeyserOffReq"
+      address: 16384
+      scan_interval: 5
+      write_type: holding
+      command_on: 2
+      command_off: 0
+      verify:
+        input_type: holding
+        address: 16384
+        state_on: 2
+        state_off: 0
+
+#Integer Values/Sensors
+  sensors:
+    - name: "Geyser Runtime SP"
+      unique_id: "BC9000-01-MB16386-GeyserRuntimeSP"
+      address: 16386
+      scan_interval: 5
+      unit_of_measurement: Min.
+      input_type: holding
+      data_type: uint16
+
+    - name: "Geyser Remaintime"
+      unique_id: "BC9000-01-MB16387-GeyserRemainTime"
+      address: 16387
+      scan_interval: 5
+      unit_of_measurement: Min.
+      input_type: holding
+      data_type: uint16
+
+    - name: "Geyser Loadshedding Level SP"
+      unique_id: "BC9000-01-MB16388-GeyserLSLvlSP"
+      address: 16388
+      scan_interval: 5
+      input_type: holding
+      data_type: uint16
+
+    - name: "Geyser Schedule Struct"
+      unique_id: "BC9000-01-MB16394-GeyserShedST"
+      address: 16394
+      scan_interval: 5
+      input_type: holding
+      count: 15
+      data_type: custom
+      structure: ">15h"
+
+#modbus:
+#  name: modbus1
+#  type: seria1
+#  method: rtu
+#  port: /dev/ttyUSB0
+#  baudrate: 9600
+#  stopbits: 1
+#  parity: N
+#  bytesize: 8
+#sensor:
+#  - platform: modbus
+#    scan_interval: 10
+#    registers:
+#      - name: xy_md02_01
+#        hub: modbus1
+#        slave: 1
+#        register: 1
+#        count: 2
+#        register_type: input
+#        data_type: custom
+#        structure: ">2h" > = Big-endian, 2 = numChars, h = short-int 2 byte
+#  - platform: template
+#    sensors:
+#      outside_temperature:
+#        friendly_name: "Outside Temp"
+#        value_template: "{{ (states('sensor.xy_md02_01').split(',')[0]|float * 0.1)|round(1)  }}"
+#      outside_humidity:
+#        friendly_name: "Outside Humid"
+#        value_template: "{{ (states('sensor.xy_md02_01').split(',')[1]|float * 0.1)|round(1)  }}"
+#      
+#      

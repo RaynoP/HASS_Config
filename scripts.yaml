@@ -1,0 +1,12 @@
+
+notify_irrigation_control_pool_zone_open_request:
+  alias: Notify Irrigation Control Pool Zone Open Request
+  use_blueprint:
+    path: homeassistant/confirmable_notification.yaml
+    input:
+      notify_device: 10f54a790f45a888c3e9372b5f11b94a
+      confirm_action:
+      - service: script.write_irrigation_pool_zone_open_response
+        data: {}
+      title: Irrigation Control
+      message: Pool Zone Opened

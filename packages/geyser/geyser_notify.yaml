@@ -1,0 +1,35 @@
+automation:
+  - id: '1681401519781'
+    alias: Notify Geyser Coil On
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.geyser_coil
+      from: 'off'
+      to: 'on'
+    condition: []
+    action:
+    - action: script.notify_all
+      data:
+        title: Geyser
+        message: "Coil On {{ now().strftime('%H:%M') }} "
+    mode: single
+
+  - id: '1681401593411'
+    alias: Notify Geyser Coil Off
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.geyser_coil
+      from: 'on'
+      to: 'off'
+    condition: []
+    actions:
+    - action: script.notify_all
+      data:
+        title: Geyser
+        message: "Coil Off {{ now().strftime('%H:%M') }} "
+    mode: single
+    

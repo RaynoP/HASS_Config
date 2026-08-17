@@ -1,0 +1,109 @@
+automation:
+  - alias: Start Irrigation with Dynamic Time and Duration
+    id: 1b8c329e-6a8c-4fd6-8e0a-94ac78cd498c
+    description: >-
+      Fires on a Google Calendar event whose summary contains "Irrigation" plus a
+      number (e.g. "Irrigation - 13"). Writes that many minutes into
+      input_number.sprinkler_control_runtime_in, verifies the helper actually took
+      the value, then runs the irrigation start sequence.
+      Safe to test with "Run actions" — falls back to default_minutes when there is
+      no calendar trigger context.
+
+    mode: restart
+    max_exceeded: silent
+
+    triggers:
+      - trigger: calendar
+        event: start
+        offset: "0:0:0"
+        entity_id: calendar.rayno_powell_gmail_com
+
+    conditions:
+      # Tolerant: case-insensitive, any separator, just needs "irrigation" + a number.
+      # Only evaluated on a real trigger — skipped entirely by "Run actions".
+      - condition: template
+        value_template: >-
+          {{ trigger is defined
+             and trigger.calendar_event is defined
+             and trigger.calendar_event.summary | regex_search('irrigation', ignorecase=True)
+             and (trigger.calendar_event.summary | regex_findall('\\d+') | count) > 0 }}
+
+    actions:
+      # ------------------------------------------------------------ 1. Parse
+      - variables:
+          default_minutes: 18
+          manual_run: >-
+            {{ not (trigger is defined and trigger.calendar_event is defined) }}
+          summary: >-
+            {{ trigger.calendar_event.summary if not manual_run else 'Manual run' }}
+          nums: >-
+            {{ summary | regex_findall('\\d+') }}
+          duration: >-
+            {{ (nums | first | int(default_minutes)) if (nums | count) > 0
+               else default_minutes }}
+
+      # -------------------------------------------------- 2. Write the value
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.sprinkler_control_runtime_in
+        data:
+          value: "{{ duration | int(default_minutes) }}"
+
+      # --------------------------- 3. Verify the helper actually accepted it
+      # set_value is async; without this the next script can read a stale value.
+      - wait_template: >-
+          {{ states('input_number.sprinkler_control_runtime_in') | float(-1)
+             == duration | float(default_minutes) }}
+        timeout: "00:00:05"
+        continue_on_timeout: true
+
+      - variables:
+          helper_now: "{{ states('input_number.sprinkler_control_runtime_in') }}"
+          write_ok: >-
+            {{ states('input_number.sprinkler_control_runtime_in') | float(-1)
+               == duration | float(default_minutes) }}
+
+      # -------------------------------------- 4. Report what ACTUALLY happened
+      - action: script.notify_rayno
+        data:
+          title: >-
+            Irrigation {{ 'starting' if write_ok else 'WRITE FAILED' }}
+          message: >-
+            {{ now().strftime('%H:%M') }} — "{{ summary }}"{{ ' (manual run)' if manual_run else '' }}.
+            Parsed: {{ duration }} min. Helper reads: {{ helper_now }}.
+            {{ '' if write_ok else 'Value did not stick — check the helper min/max, or an ADS readback overwriting it.' }}
+
+      # --------------------------------- 5. Abort loudly if the write failed
+      - if:
+          - condition: template
+            value_template: "{{ not write_ok }}"
+        then:
+          - stop: >-
+              Runtime value did not land in input_number.sprinkler_control_runtime_in
+              — aborting the start sequence rather than irrigating on a stale value.
+
+      # ---------------------------------------------------- 6. Start sequence
+      - action: script.write_irrigation_run_main_seq_on
+
+      - if:
+          - condition: state
+            entity_id: binary_sensor.irrigation_control_valve_auto_automatic_enabled
+            state: "off"
+        then:
+          - action: script.flip_auto_enabled
+
+      - delay:
+          milliseconds: 200
+      - action: script.reset_irrigation_hose_or_zone
+
+      - delay:
+          milliseconds: 200
+      - action: script.write_irrigation_hose_or_zone_response
+
+      - delay:
+          milliseconds: 200
+      - action: script.set_irrigation_hose_out
+
+      - delay:
+          milliseconds: 200
+      - action: script.write_irrigation_hose_out_response

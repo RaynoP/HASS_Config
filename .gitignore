@@ -1,0 +1,78 @@
+# =====================================================================
+#  Home Assistant .gitignore  —  blacklist style
+#
+#  How this works: git tracks EVERYTHING by default. The lines below are
+#  the EXCEPTIONS — the files & folders git will ignore.
+#
+#  There is intentionally NO bare "*" line. A bare "*" ignores everything
+#  and then forces you to re-include every folder by hand with "!", which
+#  silently drops nested .yaml (automations/, templates/, packages/...).
+#  Don't add one. This blacklist style is the safer, more forgiving one.
+#
+#  Golden rule:  git  = your hand-written YAML.
+#                HA Backups = the database, .storage, full recovery.
+#  Never commit the database.
+# =====================================================================
+
+# ---- Secrets & credentials (NEVER commit — HA Backups protect these) ----
+secrets.yaml
+.storage/
+.cloud/
+.google.token
+*.token
+ip_bans.yaml
+known_devices.yaml
+ssh*
+.ssh/
+
+# ---- Databases (huge, change every second — belong in Backups, not git) ----
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+
+# ---- Logs ----
+*.log
+*.log.*
+OZW_Log.txt
+
+# ---- HA runtime / cache / internals ----
+.HA_VERSION
+.uuid
+.bash*
+.ha_run*
+deps/
+tts/
+image/
+tmp/
+
+# ---- Backups (HA already stores these — don't duplicate them into git) ----
+backups/
+
+# ---- Locally served web content (HACS frontend cards land in www/community) ----
+#   Remove this line if you hand-write custom cards you DO want versioned.
+www/
+
+# ---- Third-party integrations (HACS re-downloads these; keeps repo lean) ----
+#   Ignoring the whole folder never goes stale when you add a new HACS
+#   integration. If you write your OWN component, un-ignore just that one:
+#     !custom_components/my_own_thing/
+custom_components/*
+#   Exceptions — track these specific components in git:
+!custom_components/luxpower/
+
+# ---- OS / editor noise ----
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+
+# ---- ESPHome (nested folder, formerly its own git repo) ----
+#   esphome keeps its OWN secrets file with WiFi/API/OTA passwords.
+#   These lines protect it once the inner .git is parked and the
+#   folder becomes normal tracked files.
+esphome/secrets.yaml
+esphome/.esphome/
+esphome/.git_disabled/
+esphome/.device-builder*
+esphome/*.bin

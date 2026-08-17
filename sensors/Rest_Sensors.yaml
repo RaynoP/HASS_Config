@@ -1,0 +1,13 @@
+- platform: rest
+  name: "External IP"
+  unique_id: "External_IP"
+  resource: "https://api.ipify.org/?format=json"
+  value_template: "{{ value_json.ip }}"
+  scan_interval: 1800
+
+- platform: rest
+  name: "External IPv6"
+  unique_id: "External_IPv6"
+  resource: "https://api6.ipify.org/?format=json"
+  value_template: "{{ value_json.ip }}"
+  scan_interval: 1800

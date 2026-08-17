@@ -1,0 +1,1879 @@
+{% macro random_name() %}
+{#-
+  This will return one of the official color names recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names do not have spaces in them so that we can compare against
+    requests more easily (by removing spaces from the requests as well).
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen". 
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import random_name %}
+    {{- random_name() -}}
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- set _color_dict = _nameMap._rgb | random %}
+{{- _color_dict.color -}}
+{%- endmacro %}
+
+{% macro random_xy() %}
+{#-
+  This will return a CSV string that will convert to a list for a
+    random color in the x,y format.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import random_xy %}
+    {% set _rxy = random_xy().split(",") | list %}
+    {{ [_rxy[0]|float|round(3),_rxy[1]|float|round(3)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+
+{%- set (X,Y) = [range(1001),range(1001)] | map('random') | list %}
+{{- X/1000 -}},{{- Y/1000 -}}
+{%- endmacro %}
+
+{% macro random_hs() %}
+{#-
+  This will return a CSV string that will convert to a list for a
+    random color in the h,s format.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import random_hs %}
+    {% set _rhs = random_hs().split(",") | list %}
+    {{ [_rhs[0]|float|round(2),_rhs[1]|float|round(2)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- set (H,S) = [range(36001),range(10001)] | map('random') | list %}
+{{- H/100 -}},{{- S/100 -}}
+{%- endmacro %}
+
+{% macro random_rgb() %}
+{#-
+  This will return a CSV string that will convert to a list for a
+    random color in the rgb format.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Thanks to @123 for help cleaning up the random circuit [here](https://community.home-assistant.io/t/is-there-a-better-way-to-do-this-or-for-light-use-is-this-just-fine/667543/3).
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import random_rgb %}
+    {% set _rrgb = random_rgb().split(",") | list %}
+    {{ [_rrgb[0]|int(0),_rrgb[1]|int(0),_rrgb[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{% set (R,G,B) = [range(256),range(256),range(256)] | map('random') | list %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
+{% macro name2rgb(color_name) %}
+{#-
+  This will return the RGB value for an official color name recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names must not have spaces, uppercase, or punctuation in them so that we can
+    compare against requests more easily .
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen".
+  If the exact name is not found, it will return "0.0.0", IE black,
+    because then name you provided is not a color on the official list.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import name2rgb %}
+    {{ name2rgb(color_name) }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkNAME(color_name) | bool %}
+  {%- set R = _nameMap['_rgb'] | selectattr('color', 'eq', color_name) | map(attribute='r') | first | default([]) %}
+  {%- set G = _nameMap['_rgb'] | selectattr('color', 'eq', color_name) | map(attribute='g') | first | default([]) %}
+  {%- set B = _nameMap['_rgb'] | selectattr('color', 'eq', color_name) | map(attribute='b') | first | default([]) %}
+{%- else %}
+    {#- Set defaults #}
+  {%- set R = 0 %}
+  {%- set G = 0 %}
+  {%- set B = 0 %}
+{%- endif %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
+{% macro rgb2name(_range, rgbl) %}
+{#-
+  This template will accept a list representing an RGB value plus a range
+    value representing the window size of the 'close enough' color name.
+    It will return the Home Assistant Color name that matches it or is close
+    to it within a +/- range you specify.
+
+    > If you want only an exact match, then set the range to 0.
+    > If you think that +10/-10 is close enough, then set the range to 10.
+
+    For default the color is set to black [0,0,0] and the range is 0, so it will
+    by give you black for invalid input.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb2name %}
+    {{ rgb2name(10,rgbl) }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | default(false) | bool %}
+  {#- Set defaults #}
+{%- set out = ["black"] | list %}
+  {#- Pull in the data #}
+{%- set _rnge = _range | default(0) | round(0,0) %}
+{%- set iR = rgbl[0] | default(0) | int(0) %}
+{%- set iG = rgbl[1] | default(0) | int(0) %}
+{%- set iB = rgbl[2] | default(0) | int(0) %}
+  {#- Define Ranges for each color #}
+{%- set _Rl = rgbl[0] + _rnge %}
+{%- set _Gl = rgbl[1] + _rnge %}
+{%- set _Bl = rgbl[2] + _rnge %}
+{%- set _Rg = rgbl[0] - _rnge %}
+{%- set _Gg = rgbl[1] - _rnge %}
+{%- set _Bg = rgbl[2] - _rnge %}
+  {#- Grab matching colors out of the list. #}
+{%- set out = _nameMap['_rgb'] |
+  selectattr('r', 'ge', _Rg) | 
+  selectattr('r', 'le', _Rl) | 
+  selectattr('g', 'ge', _Gg) |
+  selectattr('g', 'le', _Gl) |
+  selectattr('b', 'ge', _Bg) |
+  selectattr('b', 'le', _Bl) |
+  map(attribute='color') | list | default(['black']) %}
+{{- out -}}
+{%- else %}
+  {#- Input was not valid #}
+{{-['black'] | list -}}
+{%- endif %}
+{% endmacro %}
+
+{% macro rgb2xy(rgbl) %}
+{#-
+  This will return a CSV string that will convert to a list in the x,y format
+    from the rgb list provided.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Code lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb2xy %}
+    {% set _rgb2xy = rgb2xy(_nrgb).split(",") | list %}
+    {{ [_rgb2xy[0]|float|round(3),_rgb2xy[1]|float|round(3)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+    {#- Set defaults #}
+  {%- set iR = rgbl[0] | int(0) %}
+  {%- set iG = rgbl[1] | int(0) %}
+  {%- set iB = rgbl[2] | int(0) %}
+  {%- if iR + iG + iB != 0 %}
+    {%- set R = iR / 255 %}
+    {%- set B = iB / 255 %}
+    {%- set G = iG / 255 %}
+      {#- Gamma correction #}
+    {%- if (R > 0.04045) %}
+      {%- set R = ((R + 0.055) / (1.0 + 0.055) ** 2.4) %}
+    {%- else %}
+      {%- set R = (R / 12.92) %}
+    {%- endif %}
+
+    {%- if (G > 0.04045) %}
+      {%- set G = ((G + 0.055) / (1.0 + 0.055) ** 2.4) %}
+    {%- else %}
+      {%- set G = (G / 12.92) %}
+    {%- endif %}
+
+    {%- if (B > 0.04045) %}
+      {%- set B = ((B + 0.055) / (1.0 + 0.055) ** 2.4) %}
+    {%- else %}
+      {%- set B = (B / 12.92) %}
+    {%- endif %}
+      {#- Wide RGB D65 conversion formula #}
+    {%- set X = R * 0.664511 + G * 0.154324 + B * 0.162028 %}
+    {%- set Y = R * 0.283881 + G * 0.668433 + B * 0.047685 %}
+    {%- set Z = R * 0.000088 + G * 0.072310 + B * 0.986039 %}
+      {#- Convert XYZ to xy #}
+    {%- set x = X / (X + Y + Z) %}
+    {%- set y = Y / (X + Y + Z) %}
+      {#- Change the output names to match this macro #}
+    {%- set X = x | float(0) | round(3) %}
+    {%- set Y = y | float(0) | round(3) %}
+  {%- else %}
+      {#- Color started as black #}
+    {%- set X = 0.0 %}
+    {%- set Y = 0.0 %}
+  {%- endif %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set X = 0.0 %}
+  {%- set Y = 0.0 %}
+{%- endif %}
+{{- X -}},{{- Y -}}
+{%- endmacro %}
+
+{% macro xy2rgb(xyl) %}
+{#-
+  This will return a CSV string that will convert to a list in the rgb format
+    from the xy list provided.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Code lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py.
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import xy2rgb %}
+    {% set _xy2rgb = xy2rgb(xyl).split(",") | list %}
+    {{ [_xy2rgb[0]|int(0),_xy2rgb[1]|int(0),_xy2rgb[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkXY(xyl) | bool %}
+  {%- set vX = xyl[0] | float(0) %}
+  {%- set vY = xyl[1] | float(0.00000000001) %}
+  {%- set vY = vY + 0.00000000001 %}
+  {%- set Y = 1 %}
+  {%- set X = (Y / vY) * vX %}
+  {%- set Z = (Y / vY) * (1 - vX - vY) %}
+    {#- Convert to RGB using Wide RGB D65 conversion. #}
+  {%- set r = X * 1.656492 - Y * 0.354851 - Z * 0.255038 %}
+  {%- set g = -X * 0.707196 + Y * 1.655397 + Z * 0.036152 %}
+  {%- set b = X * 0.051713 - Y * 0.121364 + Z * 1.011530 %}
+    {#- Apply reverse gamma correction. #}
+  {%- if r <= 0.0031308 %}
+    {%- set r = 12.92 * r %}
+  {%- else %}
+    {%- set r = ((1.0 + 0.055) * (r ** (1.0 / 2.4)) - 0.055) %}
+  {%- endif %}
+
+  {%- if g <= 0.0031308 %}
+    {%- set g = 12.92 * g %}
+  {%- else %}
+    {%- set g = ((1.0 + 0.055) * (g ** (1.0 / 2.4)) - 0.055) %}
+  {%- endif %}
+
+  {%- if b <= 0.0031308 %}
+    {%- set b = 12.92 * b %}
+  {%- else %}
+    {%- set b = ((1.0 + 0.055) * (b ** (1.0 / 2.4)) - 0.055) %}
+  {%- endif %}
+    {#- Bring all negative components to zero. #}
+  {%- set r = [0, r] | max %}
+  {%- set g = [0, g] | max %}
+  {%- set b = [0, b] | max %}
+    {#- If one component is greater than 1, weight components by that value. #}
+  {%- set max_component = [r, g, b] | max %}
+  {%- if max_component > 1 %}
+    {%- set r = r / max_component %}
+    {%- set g = g / max_component %}
+    {%- set b = b / max_component %}
+  {%- endif %}
+  {%- set R = (r * 255) | int(0) %}
+  {%- set G = (g * 255) | int(0) %}
+  {%- set B = (b * 255) | int(0) %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set R = 0 %}
+  {%- set G = 0 %}
+  {%- set B = 0 %}
+{%- endif %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
+{% macro hs2rgb(hsl) %}
+{#-
+  This will return a CSV string that will convert to a list in the rgb format
+    from the hs list provided.
+
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+
+  Code adaptation from https://github.com/jdepp236.
+  See https://github.com/SirGoodenough/Color-Multi-Tool/issues/11#issuecomment-3314419086
+
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import hs2rgb %}
+    {% set _hs2rgb = hs2rgb(hsl).split(",") | list %}
+    {{ [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+    {#- First a test to make sure input is valid #}
+{%- if chkHS(hsl) | bool %}
+    {#- Correctly scale both H and S to the 0-1 range FIRST. V is assumed 1.0. -#}
+  {%- set h = (hsl[0] | float(0)) / 360 %}
+  {%- set s = (hsl[1] | float(0)) / 100 %}
+  {%- set v = 1.0 %}
+
+  {%- if s == 0.0 %}
+    {%- set r, g, b = v, v, v %}
+  {%- else %}
+    {%- set i = (h * 6.0) | int %}
+    {%- set f = (h * 6.0) - i %}
+    {%- set p = v * (1.0 - s) %}
+    {%- set q = v * (1.0 - s * f) %}
+    {%- set t = v * (1.0 - s * (1.0 - f)) %}
+    {%- if i == 0 %}
+      {%- set r, g, b = v, t, p %}
+    {%- elif i == 1 %}
+      {%- set r, g, b = q, v, p %}
+    {%- elif i == 2 %}
+      {%- set r, g, b = p, v, t %}
+    {%- elif i == 3 %}
+      {%- set r, g, b = p, q, v %}
+    {%- elif i == 4 %}
+      {%- set r, g, b = t, p, v %}
+    {%- else %}
+      {%- set r, g, b = v, p, q %}
+    {%- endif %}
+  {%- endif %}
+    {#- Convert the final 0-1 values to 0-255 for RGB. -#}
+  {%- set R = (r * 255) | round(0) | int %}
+  {%- set G = (g * 255) | round(0) | int %}
+  {%- set B = (b * 255) | round(0) | int %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set R = 0 %}
+  {%- set G = 0 %}
+  {%- set B = 0 %}
+{%- endif %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
+{% macro rgb2hs(rgbl) %}
+{#-
+  This will return a CSV string that will convert to a list in the x,y format
+    from the rgb list provided.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  Code lifted directly from the here November, 2023 at
+    https://www.cs.rit.edu/~ncs/color/t_convert.html#RGB%20to%20HSV%20&%20HSV%20to%20RGB.
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb2hs %}
+    {% set _rgb2hs = rgb2hs(rgbl).split(",") | list %}
+    {{[ _rgb2hs[0]|float(0)|round(3),_rgb2hs[1]|float(0)|round(3)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set r = rgbl[0] | int(0) %}
+  {%- set g = rgbl[1] | int(0) %}
+  {%- set b = rgbl[2] | int(0) %}
+  {%- if r + g + b != 0 %}
+    {%- set min = [r, g, b] | min %}
+    {%- set max = [r, g, b] | max %}
+      {#- Set brightness to 100% #}
+      {#- set _V = max (alternate) #}
+    {%- set _V = 255 %}
+      {#- Calculate S #}
+    {%- set delta = max-min %}
+    {%- set _S = (delta / max) * 100 %}
+      {#- Calculate H #}
+    {%- if r == max %}
+        {#- between yellow & magenta #}
+      {%- set _H = ( g - b ) / delta %}
+    {%- elif g == max %}
+        {#- between cyan & yellow #}
+      {%- set _H = 2 + ( b - r ) / delta %}
+    {%- else %}
+        {#- between magenta & cyan #}
+      {%- set _H = 4 + ( r - g ) / delta %}
+    {%- endif %}
+    {%- set _H = _H * 60 %}
+    {%- if _H < 0 %}
+      {%- set _H = _H + 360 %}
+    {%- endif %}
+      {#- Calculate the output #}
+    {%- set H = _H | float(0) | round(3) %}
+    {%- set S = _S | float(0) | round(3) %}
+    {%- set V = _V | float(0) | round(3) %}
+  {%- else %}
+      {#- Color started as black #}
+    {%- set H = 0.0 %}
+    {%- set S = 0.0 %}
+    {%- set V = 0.0 %}
+  {%- endif %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set H = 0.0 %}
+  {%- set S = 0.0 %}
+  {%- set V = 0.0 %}
+{%- endif %}
+{{- H -}},{{- S -}}
+{%- endmacro %}
+
+{% macro hs2xy(hsl) %}
+{#-
+  This will return a CSV string that will convert to a list in the hs format
+    from the xy list provided.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  This converter uses other templates provided in this Custom Jinja Template.
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import hs2xy %}
+    {% set _hs2xy = hs2xy(hsl).split(",") | list %}
+    {{ [_hs2xy[0]|float|round(3),_hs2xy[1]|float|round(3)] }} 
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkHS(hsl) | bool %}
+  {%- set _hs2rgb = hs2rgb(hsl).split(",") | list %}
+  {%- set _hs2rgb_list = [_hs2rgb[0]|int(0),_hs2rgb[1]|int(0),_hs2rgb[2]|int(0)] | list %}
+  {%- set _rgb2xy = rgb2xy(_hs2rgb_list).split(",") | list %}
+  {%- set _rgb2xy_list = [_rgb2xy[0]|float(0)|round(3),_rgb2xy[1]|float(0)|round(3)] | list %}
+    {#- Calculate the output #}
+  {%- set X = _rgb2xy_list[0] | float(0.0) | round(3) %}
+  {%- set Y = _rgb2xy_list[1] | float(0.0) | round(3) %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set X = 0.0 %}
+  {%- set Y = 0.0 %}
+{%- endif %}
+{{- X -}},{{- Y -}}
+{%- endmacro %}
+
+{% macro xy2hs(xyl) %}
+{#-
+  This will return a CSV string that will convert to a list in the hs format
+    from the xy list provided.
+  Be sure to convert this to a list when you use it on the other end
+    because it arrives as a CSV string.
+  This converter uses other templates provided in this Custom Jinja Template.
+  Brightness is assumed to be 100%
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import xy2hs %}
+    {% set _xy2hs = xy2hs(xyl).split(",") | list %}
+    {{ [_xy2hs[0]|float|round(3),_xy2hs[1]|float|round(3)] }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {#- First a test to make sure input is valid #}
+{%- if chkXY(xyl) | bool %}
+  {%- set _xy2rgb = xy2rgb(xyl).split(",") | list %}
+  {%- set _xy2rgb_list = [_xy2rgb[0]|int(0),_xy2rgb[1]|int(0),_xy2rgb[2]|int(0)] | list %}
+  {%- set _rgb2hs = rgb2hs(_xy2rgb_list).split(",") | list %}
+  {%- set _rgb2hs_list = [_rgb2hs[0]|float(0)|round(3),_rgb2hs[1]|float(0)|round(3)] | list %}
+    {#- Calculate the output #}
+  {%- set H = _rgb2hs_list[0] | float(0.0) | round(3) %}
+  {%- set S = _rgb2hs_list[1] | float(0.0) | round(3) %}
+{%- else %}
+    {#- Input was not valid #}
+  {%- set H = 0.0 %}
+  {%- set S = 0.0 %}
+{%- endif %}
+{{- H -}},{{- S -}}
+{%- endmacro %}
+
+{% macro chkRGB(_rgbl) %}
+{#- Is the RGB list Valid? 
+This will test a list to make sure it’s a valid RGB color list.
+
+First we need to make sure it’s a list, and that the list has 3 members.
+Then we need to test that each member is a number, an integer, and between 0 & 255.
+If all that is true return true.
+If any is not true, return false.
+Development credit to @Didgeridrew and @jeffcrum on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/3)
+  for help sorting this out.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkRGB %}
+    {{ chkRGB([255,165,0]) | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- if _rgbl is list and _rgbl | count == 3 %}
+{%- for clr in _rgbl if is_number(clr) and int(clr,0) == clr and 0 <= clr <= 255 %}
+{%- if loop.last %}
+{{- loop.index == 3 -}}
+{%- endif %}{%- endfor%}{%- else %}
+{{- false -}}
+{%- endif %}
+{%- endmacro %}
+
+{% macro chkXY(_xyl) %}
+{#- Is the XY list Valid? 
+This will test a list to make sure it’s a valid XY color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number, and between 0 & 1.
+If all that is true return true.
+If any is not true, return false.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+  for help sorting this out.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkXY %}
+    {{ chkXY([0.497,0.472]) | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{{- _xyl is list and
+  _xyl | select('number') | list | count == 2 and
+  _xyl | select('<', 0) | list | count == 0 and
+  _xyl | select('>', 1) | list | count == 0 -}}
+{%- endmacro %}
+
+{% macro chkHS(_hsl) %}
+{#- Is the XY list Valid? 
+This will test a list to make sure it’s a valid HS color list.
+
+First we need to make sure it’s a list, and that the list has 2 members.
+Then we need to test that each member is a number.
+The first one has to be 0 to 100, the second one has to be 0 to 360.
+If all that is true return true.
+If any is not true, return false.
+Development credit to @123 on the
+[Home Assistant Community Forums](https://community.home-assistant.io/t/help-with-test-of-a-list-of-numbers/664839/5)
+  for help sorting this out.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkHS %}
+    {{ chkHS([38.824,100.0]) | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{{- _hsl is list and
+  _hsl | select('number') | list | count == 2 and
+  _hsl | select('<', 0) | list | count == 0 and
+  _hsl[1] <= 100 and
+  _hsl[0] <= 360 -}}
+{%- endmacro %}
+
+{% macro chkNAME(color_name) %}
+{#- Is this color name on the official list?
+This will test a provided color name to see if it is on the HA color list.
+
+First we need to make sure it’s a string_like variable.
+Then we test that the string is only lowercase letters to match the HA list.
+Then we iterate thru the list to make sure it is on the list.
+If all that is true return true.
+If any is not true, return false.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import chkNAME %}
+    {{ chkNAME('orange') | bool }}
+
+  REMEMBER:
+    This always returns text, so cast to bool on the other end to be
+    certain of the result.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- if color_name is string_like and
+  color_name == color_name | regex_replace('[^a-z]', '') %}
+  {#- Is the name provided on the list? #}
+{%- set ns = namespace(found = false) %}
+{%- for color_item in _nameMap._rgb %}
+  {%- if color_item.color == color_name %}
+    {%- set ns.found = true -%}
+    {%- break %}{%- endif -%}{%- endfor -%}
+{{- ns.found -}}
+{%- else %}
+{{- false -}}
+{%- endif %}
+{%- endmacro %}
+
+{% macro color_list() %}
+{#-
+  This will return all of the official color names recognized by Home Assistant
+    lifted directly from the Home Assistant core github November, 2023 at
+    https://github.com/home-assistant/core/blob/dev/homeassistant/util/color.py
+    and the Official CSS3 colors from w3.org:
+    https://www.w3.org/TR/2010/PR-css3-color-20101028/#html4
+    Names do not have spaces in them so that we can compare against
+    requests more easily (by removing spaces from the requests as well).
+    This lets "dark seagreen" and "dark sea green" both match the same
+    color "darkseagreen". 
+    You also get the RGB color code for each of the color names.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import color_list %}
+    {{- color_list().split('\n') | list -}}
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- for colors in _nameMap._rgb -%}
+{%- set c_list = {colors.color:[colors.r,colors.g,colors.b]} -%}
+{{- c_list ~ '\n'-}}
+{%- endfor -%}
+{%- endmacro %}
+
+{%- macro k2rgb(colour_temperature) %}
+  {# This will return and RGB list of the corresponding Color Temperature 
+  Kelvin value provided.
+  Value will be validated as a number 1000 thru 40000.
+  If you want to cheat with Kelvin values outside that range,
+  read the chkK(int) macro for instructionson doing this.
+
+  Converts from K to RGB, algorithm courtesy of 
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
+  This jinga adaptation courtesy [Didgeridrew](https://github.com/Didgeridrew)
+
+  SAMPLE USAGE:
+    {% set _k2rgb = k2rgb(kl).split(",") | list %}
+    {{ [_k2rgb[0]|int(0),_k2rgb[1]|int(0),_k2rgb[2]|int(0)] }}
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+  {# Screen input as a number #}
+{%- set colour_temperature = int(colour_temperature,0) %}
+  {#- The next line returns =, closest, or between 1000 & 40000. #}
+{#- {%- set colour_temperature = ([1000,colour_temperature,40000]|sort)[1] %} #}
+
+  {#- First a test to make sure input is valid #}
+{%- if chkK(colour_temperature) | bool | default(false) %}
+
+  {#- Pull in the data #}
+  {%- set tmp_internal = colour_temperature / 100.0 %}
+
+    {#- red #}
+    {%- if tmp_internal <= 66 %}
+        {%- set red = 255 %}
+    {%- else %}
+        {%- set tmp_red = 329.698727446 * ((tmp_internal - 60)** -0.1332047592)%}
+        {%- if tmp_red < 0%}
+            {%- set red = 0%}
+        {%- elif tmp_red > 255%}
+            {%- set red = 255%}
+        {%- else %}
+            {%- set red = tmp_red%}
+    {%-endif%}{%-endif%}
+    {#- green #}
+    {%- if tmp_internal <= 66 %}
+        {%- set tmp_green = 99.4708025861 * log(tmp_internal) - 161.1195681661 %}
+        {%- if tmp_green < 0%}
+            {%- set green = 0%}
+        {%- elif tmp_green > 255%}
+            {%- set green = 255%}
+        {%- else %}
+            {%- set green = tmp_green%}
+        {%-endif%}
+    {%- else %}
+        {%- set tmp_green = 288.1221695283 * ((tmp_internal - 60)**-0.0755148492) %}
+        {%- if tmp_green < 0%}
+            {%- set green = 0%}
+        {%- elif tmp_green > 255%}
+            {%- set green = 255%}
+        {%- else %}
+            {%- set green = tmp_green%}
+    {%-endif%}{%-endif%}
+    {#- blue #}
+    {%- if tmp_internal >=66%}
+      {%- set  blue = 255%}
+    {%- elif tmp_internal <= 19%}
+        {%- set blue = 0%}
+    {%- else %}
+        {%- set tmp_blue = 138.5177312231 * log(tmp_internal - 10) - 305.0447927307%}
+        {%- if tmp_blue < 0%}
+            {%- set blue = 0%}
+        {%- elif tmp_blue > 255%}
+            {%- set blue = 255%}
+        {%- else %}
+            {%- set blue = tmp_blue%}
+    {%-endif%}{%-endif%}
+    {#- {{ [red|int, green|int, blue|int] }} #}
+    {%- set R = red | int(0) %}
+    {%- set G = green | int(0) %}
+    {%- set B = blue | int(0) %}
+  {%- else %}
+      {#- Input was not valid #}
+    {%- set R = 0 %}
+    {%- set G = 0 %}
+    {%- set B = 0 %}
+{%- endif %}
+{{- R -}},{{- G -}},{{- B -}}
+{%- endmacro %}
+
+{%- macro chkK(_K) -%}
+{#- Is the Kelvin value in the Valid Range? 
+  This will test that a number is a valid Kelvin number 500 thru 40000.
+
+  First we need to test that this is a number.
+  Then we check if it 500 thru 40,000.
+  If all that is true return true.
+  If any is not true, return false.
+
+  NOTE: If you want to input Kelvin numbers that are out of range,
+    then uncomment the {{- true -}}  right before {% endmacro %}
+    so that this only tests for a valid number.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+-#}
+{%- set _K = _K | int( 0 ) -%}
+{%- if _K == 0 %}
+  {{- false -}}
+{%- else %}
+  {{- ( _K >= 500 ) and ( _K <= 40000) -}}
+{%- endif %}
+{#- {{- true -}} -#}
+{%- endmacro %}
+
+
+{% macro rgb2k(rgbl) %}
+  {# This will return the Color Temperature Kelvin based on the RGB value provided.
+  Input value will be validated as a list of 3 integers between 0 & 255.
+
+  Default output is 0, so if something goes wrong it will return 0.
+
+  Converts from RGB to K, algorithm courtesy of 
+  http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/.
+  The closest match code and the idea for this method is from:
+  https://gist.github.com/xalbertoisorna October, 2025:
+  https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  These numbers were dropped in a table as a lookup and are polled
+  based on a best match formula.
+
+  That formula squares the difference for R, G, & B and adds them up,
+  lowest score wins. The table is not continuous, it jumps 100 KELVIN at a
+  time so there are some approximations going on here.
+  
+  None of this color stuff is exact...
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb2k %}
+    {{ rgb2k([51.255,255]) }}
+
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+{%- set K = namespace(dist = 0, minDist = 200000, out = 0, r = 0, g = 0, b = 0) %}
+    {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set K.r = rgbl[0] | int(0) %}
+  {%- set K.g = rgbl[1] | int(0) %}
+  {%- set K.b = rgbl[2] | int(0) %}
+  {%- if K.r + K.g + K.b != 0 %}
+    {#- Find the best matching KELVIN in the list. #}
+    {%- for best in _rgbKMap['_rgbK'] %}
+    {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
+      {%- set K.dist = (K.r-best.L[0])*(K.r-best.L[0])+(K.g-best.L[1])*(K.g-best.L[1])+(K.b-best.L[2])*(K.b-best.L[2]) %}
+      {%- if K.dist < K.minDist %}
+        {%- set K.minDist = K.dist  %}
+        {%- set K.out = best.L[3] %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+{%- else %}
+  {%- set K.out = 0 %}
+{%- endif %}
+{{- K.out -}}
+{%- endmacro %}
+
+
+
+{% macro rgb_bestname(rgbl) %}
+{#-
+  This will return a string that is the name in the HA table
+    closest to the rgb list provided based on the sum of the squared differences. 
+
+  Code adapted from https://gist.github.com/xalbertoisorna here October, 2025:
+    https://gist.github.com/petrklus/b1f427accdf7438606a6?permalink_comment_id=4977807#gistcomment-4977807
+
+  For default the color is set to black [0,0,0] so it will
+    give you black for invalid input as well.
+
+  SAMPLE USAGE:
+    {% from 'color_multi_tool.jinja' import rgb_bestname %}
+    {{ rgb_bestname(rgbl) }}
+
+  REMEMBER:
+    Everything returned from a macro template is a string.
+
+  #### 🗿License Notice:
+    * I & my license require attribution as a link back to the original should
+      you use this code in your own creation.
+    * Here is a link to my license & the original github post
+      https://github.com/SirGoodenough/Color-Multi-Tool?tab=License-1-ov-file
+      expected to be followed & referenced
+      as attribution should you use this code elsewhere.
+#}
+
+    {#- Set defaults #}
+{%- set M = namespace(dist = 0, minDist = 200000, out = 'black', r = 0, g = 0, b = 0) %}
+    {#- First a test to make sure input is valid #}
+{%- if chkRGB(rgbl) | bool %}
+  {%- set M.r = rgbl[0] | int(0) %}
+  {%- set M.g = rgbl[1] | int(0) %}
+  {%- set M.b = rgbl[2] | int(0) %}
+  {%- if M.r + M.g + M.b != 0 %}
+    {#- Find the best matching color in the list. #}
+    {%- for best in _nameMap['_rgb'] %}
+    {#- Sum of the square of the differences of r, g, & b. Lowest is best match. #}
+      {%- set M.dist = (M.r-best.r)*(M.r-best.r)+(M.g-best.g)*(M.g-best.g)+(M.b-best.b)*(M.b-best.b) %}
+      {%- if M.dist < M.minDist %}
+        {%- set M.minDist = M.dist  %}
+        {%- set M.out = best.color %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+{%- else %}
+  {%- set M.out = 'black' %}
+{%- endif %}
+{{- M.out -}}
+{%- endmacro %}
+
+{#- COLOR NAME TO RGB MAP DATA. DO NOT CHANGE BELOW THIS LINE
+    (unless you want to add your own custom color that is...): #}
+{% set _nameMap = {
+  '_rgb': [
+    { 'color': 'aliceblue',
+    'r': 240,
+    'g': 248,
+    'b': 255, },
+    { 'color': 'antiquewhite',
+    'r': 250,
+    'g': 235,
+    'b': 215, },
+    { 'color': 'aqua',
+    'r': 0,
+    'g': 255,
+    'b': 255, },
+    { 'color': 'aquamarine',
+    'r': 127,
+    'g': 255,
+    'b': 212, },
+    { 'color': 'azure',
+    'r': 240,
+    'g': 255,
+    'b': 255, },
+    { 'color': 'beige',
+    'r': 245,
+    'g': 245,
+    'b': 220, },
+    { 'color': 'bisque',
+    'r': 255,
+    'g': 228,
+    'b': 196, },
+    { 'color': 'black',
+    'r': 0,
+    'g': 0,
+    'b': 0, },
+    { 'color': 'blanchedalmond',
+    'r': 255,
+    'g': 235,
+    'b': 205, },
+    { 'color': 'blue',
+    'r': 0,
+    'g': 0,
+    'b': 255, },
+    { 'color': 'blueviolet',
+    'r': 138,
+    'g': 43,
+    'b': 226, },
+    { 'color': 'brown',
+    'r': 165,
+    'g': 42,
+    'b': 42, },
+    { 'color': 'burlywood',
+    'r': 222,
+    'g': 184,
+    'b': 135, },
+    { 'color': 'cadetblue',
+    'r': 95,
+    'g': 158,
+    'b': 160, },
+    { 'color': 'chartreuse',
+    'r': 127,
+    'g': 255,
+    'b': 0, },
+    { 'color': 'chocolate',
+    'r': 210,
+    'g': 105,
+    'b': 30, },
+    { 'color': 'coral',
+    'r': 255,
+    'g': 127,
+    'b': 80, },
+    { 'color': 'cornflowerblue',
+    'r': 100,
+    'g': 149,
+    'b': 237, },
+    { 'color': 'cornsilk',
+    'r': 255,
+    'g': 248,
+    'b': 220, },
+    { 'color': 'crimson',
+    'r': 220,
+    'g': 20,
+    'b': 60, },
+    { 'color': 'cyan',
+    'r': 0,
+    'g': 255,
+    'b': 255, },
+    { 'color': 'darkblue',
+    'r': 0,
+    'g': 0,
+    'b': 139, },
+    { 'color': 'darkcyan',
+    'r': 0,
+    'g': 139,
+    'b': 139, },
+    { 'color': 'darkgoldenrod',
+    'r': 184,
+    'g': 134,
+    'b': 11, },
+    { 'color': 'darkgray',
+    'r': 169,
+    'g': 169,
+    'b': 169, },
+    { 'color': 'darkgreen',
+    'r': 0,
+    'g': 100,
+    'b': 0, },
+    { 'color': 'darkgrey',
+    'r': 169,
+    'g': 169,
+    'b': 169, },
+    { 'color': 'darkkhaki',
+    'r': 189,
+    'g': 183,
+    'b': 107, },
+    { 'color': 'darkmagenta',
+    'r': 139,
+    'g': 0,
+    'b': 139, },
+    { 'color': 'darkolivegreen',
+    'r': 85,
+    'g': 107,
+    'b': 47, },
+    { 'color': 'darkorange',
+    'r': 255,
+    'g': 140,
+    'b': 0, },
+    { 'color': 'darkorchid',
+    'r': 153,
+    'g': 50,
+    'b': 204, },
+    { 'color': 'darkred',
+    'r': 139,
+    'g': 0,
+    'b': 0, },
+    { 'color': 'darksalmon',
+    'r': 233,
+    'g': 150,
+    'b': 122, },
+    { 'color': 'darkseagreen',
+    'r': 143,
+    'g': 188,
+    'b': 143, },
+    { 'color': 'darkslateblue',
+    'r': 72,
+    'g': 61,
+    'b': 139, },
+    { 'color': 'darkslategray',
+    'r': 47,
+    'g': 79,
+    'b': 79, },
+    { 'color': 'darkslategrey',
+    'r': 47,
+    'g': 79,
+    'b': 79, },
+    { 'color': 'darkturquoise',
+    'r': 0,
+    'g': 206,
+    'b': 209, },
+    { 'color': 'darkviolet',
+    'r': 148,
+    'g': 0,
+    'b': 211, },
+    { 'color': 'deeppink',
+    'r': 255,
+    'g': 20,
+    'b': 147, },
+    { 'color': 'deepskyblue',
+    'r': 0,
+    'g': 191,
+    'b': 255, },
+    { 'color': 'dimgray',
+    'r': 105,
+    'g': 105,
+    'b': 105, },
+    { 'color': 'dimgrey',
+    'r': 105,
+    'g': 105,
+    'b': 105, },
+    { 'color': 'dodgerblue',
+    'r': 30,
+    'g': 144,
+    'b': 255, },
+    { 'color': 'firebrick',
+    'r': 178,
+    'g': 34,
+    'b': 34, },
+    { 'color': 'floralwhite',
+    'r': 255,
+    'g': 250,
+    'b': 240, },
+    { 'color': 'forestgreen',
+    'r': 34,
+    'g': 139,
+    'b': 34, },
+    { 'color': 'fuchsia',
+    'r': 255,
+    'g': 0,
+    'b': 255, },
+    { 'color': 'gainsboro',
+    'r': 220,
+    'g': 220,
+    'b': 220, },
+    { 'color': 'ghostwhite',
+    'r': 248,
+    'g': 248,
+    'b': 255, },
+    { 'color': 'gold',
+    'r': 255,
+    'g': 215,
+    'b': 0, },
+    { 'color': 'goldenrod',
+    'r': 218,
+    'g': 165,
+    'b': 32, },
+    { 'color': 'gray',
+    'r': 128,
+    'g': 128,
+    'b': 128, },
+    { 'color': 'green',
+    'r': 0,
+    'g': 128,
+    'b': 0, },
+    { 'color': 'greenyellow',
+    'r': 173,
+    'g': 255,
+    'b': 47, },
+    { 'color': 'grey',
+    'r': 128,
+    'g': 128,
+    'b': 128, },
+    { 'color': 'honeydew',
+    'r': 240,
+    'g': 255,
+    'b': 240, },
+    { 'color': 'hotpink',
+    'r': 255,
+    'g': 105,
+    'b': 180, },
+    { 'color': 'indianred',
+    'r': 205,
+    'g': 92,
+    'b': 92, },
+    { 'color': 'indigo',
+    'r': 75,
+    'g': 0,
+    'b': 130, },
+    { 'color': 'ivory',
+    'r': 255,
+    'g': 255,
+    'b': 240, },
+    { 'color': 'khaki',
+    'r': 240,
+    'g': 230,
+    'b': 140, },
+    { 'color': 'lavender',
+    'r': 230,
+    'g': 230,
+    'b': 250, },
+    { 'color': 'lavenderblush',
+    'r': 255,
+    'g': 240,
+    'b': 245, },
+    { 'color': 'lawngreen',
+    'r': 124,
+    'g': 252,
+    'b': 0, },
+    { 'color': 'lemonchiffon',
+    'r': 255,
+    'g': 250,
+    'b': 205, },
+    { 'color': 'lightblue',
+    'r': 173,
+    'g': 216,
+    'b': 230, },
+    { 'color': 'lightcoral',
+    'r': 240,
+    'g': 128,
+    'b': 128, },
+    { 'color': 'lightcyan',
+    'r': 224,
+    'g': 255,
+    'b': 255, },
+    { 'color': 'lightgoldenrodyellow',
+    'r': 250,
+    'g': 250,
+    'b': 210, },
+    { 'color': 'lightgray',
+    'r': 211,
+    'g': 211,
+    'b': 211, },
+    { 'color': 'lightgreen',
+    'r': 144,
+    'g': 238,
+    'b': 144, },
+    { 'color': 'lightgrey',
+    'r': 211,
+    'g': 211,
+    'b': 211, },
+    { 'color': 'lightpink',
+    'r': 255,
+    'g': 182,
+    'b': 193, },
+    { 'color': 'lightsalmon',
+    'r': 255,
+    'g': 160,
+    'b': 122, },
+    { 'color': 'lightseagreen',
+    'r': 32,
+    'g': 178,
+    'b': 170, },
+    { 'color': 'lightskyblue',
+    'r': 135,
+    'g': 206,
+    'b': 250, },
+    { 'color': 'lightslategray',
+    'r': 119,
+    'g': 136,
+    'b': 153, },
+    { 'color': 'lightslategrey',
+    'r': 119,
+    'g': 136,
+    'b': 153, },
+    { 'color': 'lightsteelblue',
+    'r': 176,
+    'g': 196,
+    'b': 222, },
+    { 'color': 'lightyellow',
+    'r': 255,
+    'g': 255,
+    'b': 224, },
+    { 'color': 'lime',
+    'r': 0,
+    'g': 255,
+    'b': 0, },
+    { 'color': 'limegreen',
+    'r': 50,
+    'g': 205,
+    'b': 50, },
+    { 'color': 'linen',
+    'r': 250,
+    'g': 240,
+    'b': 230, },
+    { 'color': 'magenta',
+    'r': 255,
+    'g': 0,
+    'b': 255, },
+    { 'color': 'maroon',
+    'r': 128,
+    'g': 0,
+    'b': 0, },
+    { 'color': 'mediumaquamarine',
+    'r': 102,
+    'g': 205,
+    'b': 170, },
+    { 'color': 'mediumblue',
+    'r': 0,
+    'g': 0,
+    'b': 205, },
+    { 'color': 'mediumorchid',
+    'r': 186,
+    'g': 85,
+    'b': 211, },
+    { 'color': 'mediumpurple',
+    'r': 147,
+    'g': 112,
+    'b': 219, },
+    { 'color': 'mediumseagreen',
+    'r': 60,
+    'g': 179,
+    'b': 113, },
+    { 'color': 'mediumslateblue',
+    'r': 123,
+    'g': 104,
+    'b': 238, },
+    { 'color': 'mediumspringgreen',
+    'r': 0,
+    'g': 250,
+    'b': 154, },
+    { 'color': 'mediumturquoise',
+    'r': 72,
+    'g': 209,
+    'b': 204, },
+    { 'color': 'mediumvioletred',
+    'r': 199,
+    'g': 21,
+    'b': 133, },
+    { 'color': 'midnightblue',
+    'r': 25,
+    'g': 25,
+    'b': 112, },
+    { 'color': 'mintcream',
+    'r': 245,
+    'g': 255,
+    'b': 250, },
+    { 'color': 'mistyrose',
+    'r': 255,
+    'g': 228,
+    'b': 225, },
+    { 'color': 'moccasin',
+    'r': 255,
+    'g': 228,
+    'b': 181, },
+    { 'color': 'navajowhite',
+    'r': 255,
+    'g': 222,
+    'b': 173, },
+    { 'color': 'navy',
+    'r': 0,
+    'g': 0,
+    'b': 128, },
+    { 'color': 'navyblue',
+    'r': 0,
+    'g': 0,
+    'b': 128, },
+    { 'color': 'oldlace',
+    'r': 253,
+    'g': 245,
+    'b': 230, },
+    { 'color': 'olive',
+    'r': 128,
+    'g': 128,
+    'b': 0, },
+    { 'color': 'olivedrab',
+    'r': 107,
+    'g': 142,
+    'b': 35, },
+    { 'color': 'orange',
+    'r': 255,
+    'g': 165,
+    'b': 0, },
+    { 'color': 'orangered',
+    'r': 255,
+    'g': 69,
+    'b': 0, },
+    { 'color': 'orchid',
+    'r': 218,
+    'g': 112,
+    'b': 214, },
+    { 'color': 'palegoldenrod',
+    'r': 238,
+    'g': 232,
+    'b': 170, },
+    { 'color': 'palegreen',
+    'r': 152,
+    'g': 251,
+    'b': 152, },
+    { 'color': 'paleturquoise',
+    'r': 175,
+    'g': 238,
+    'b': 238, },
+    { 'color': 'palevioletred',
+    'r': 219,
+    'g': 112,
+    'b': 147, },
+    { 'color': 'papayawhip',
+    'r': 255,
+    'g': 239,
+    'b': 213, },
+    { 'color': 'peachpuff',
+    'r': 255,
+    'g': 218,
+    'b': 185, },
+    { 'color': 'peru',
+    'r': 205,
+    'g': 133,
+    'b': 63, },
+    { 'color': 'pink',
+    'r': 255,
+    'g': 192,
+    'b': 203, },
+    { 'color': 'plum',
+    'r': 221,
+    'g': 160,
+    'b': 221, },
+    { 'color': 'powderblue',
+    'r': 176,
+    'g': 224,
+    'b': 230, },
+    { 'color': 'purple',
+    'r': 128,
+    'g': 0,
+    'b': 128, },
+    { 'color': 'red',
+    'r': 255,
+    'g': 0,
+    'b': 0, },
+    { 'color': 'rosybrown',
+    'r': 188,
+    'g': 143,
+    'b': 143, },
+    { 'color': 'royalblue',
+    'r': 65,
+    'g': 105,
+    'b': 225, },
+    { 'color': 'saddlebrown',
+    'r': 139,
+    'g': 69,
+    'b': 19, },
+    { 'color': 'salmon',
+    'r': 250,
+    'g': 128,
+    'b': 114, },
+    { 'color': 'sandybrown',
+    'r': 244,
+    'g': 164,
+    'b': 96, },
+    { 'color': 'seagreen',
+    'r': 46,
+    'g': 139,
+    'b': 87, },
+    { 'color': 'seashell',
+    'r': 255,
+    'g': 245,
+    'b': 238, },
+    { 'color': 'sienna',
+    'r': 160,
+    'g': 82,
+    'b': 45, },
+    { 'color': 'silver',
+    'r': 192,
+    'g': 192,
+    'b': 192, },
+    { 'color': 'skyblue',
+    'r': 135,
+    'g': 206,
+    'b': 235, },
+    { 'color': 'slateblue',
+    'r': 106,
+    'g': 90,
+    'b': 205, },
+    { 'color': 'slategray',
+    'r': 112,
+    'g': 128,
+    'b': 144, },
+    { 'color': 'slategrey',
+    'r': 112,
+    'g': 128,
+    'b': 144, },
+    { 'color': 'snow',
+    'r': 255,
+    'g': 250,
+    'b': 250, },
+    { 'color': 'springgreen',
+    'r': 0,
+    'g': 255,
+    'b': 127, },
+    { 'color': 'steelblue',
+    'r': 70,
+    'g': 130,
+    'b': 180, },
+    { 'color': 'tan',
+    'r': 210,
+    'g': 180,
+    'b': 140, },
+    { 'color': 'teal',
+    'r': 0,
+    'g': 128,
+    'b': 128, },
+    { 'color': 'thistle',
+    'r': 216,
+    'g': 191,
+    'b': 216, },
+    { 'color': 'tomato',
+    'r': 255,
+    'g': 99,
+    'b': 71, },
+    { 'color': 'turquoise',
+    'r': 64,
+    'g': 224,
+    'b': 208, },
+    { 'color': 'violet',
+    'r': 238,
+    'g': 130,
+    'b': 238, },
+    { 'color': 'wheat',
+    'r': 245,
+    'g': 222,
+    'b': 179, },
+    { 'color': 'white',
+    'r': 255,
+    'g': 255,
+    'b': 255, },
+    { 'color': 'whitesmoke',
+    'r': 245,
+    'g': 245,
+    'b': 245, },
+    { 'color': 'yellow',
+    'r': 255,
+    'g': 255,
+    'b': 0, },
+    { 'color': 'yellowgreen',
+    'r': 154,
+    'g': 205,
+    'b': 50, },
+    { 'color': 'homeassistant',
+    'r': 24,
+    'g': 188,
+    'b': 242, },
+  ],
+} %}
+
+{#- RGB TO KELVIN MAP DATA. DO NOT CHANGE BELOW THIS LINE #}
+{% set _rgbKMap = {
+  '_rgbK': [
+    {'L':[255, 0, 0, 500]},
+    {'L':[255, 17, 0, 600]},
+    {'L':[255, 32, 0, 700]},
+    {'L':[255, 45, 0, 800]},
+    {'L':[255, 57, 0, 900]},
+    {'L':[255, 67, 0, 1000]},
+    {'L':[255, 77, 0, 1100]},
+    {'L':[255, 86, 0, 1200]},
+    {'L':[255, 94, 0, 1300]},
+    {'L':[255, 101, 0, 1400]},
+    {'L':[255, 108, 0, 1500]},
+    {'L':[255, 114, 0, 1600]},
+    {'L':[255, 120, 0, 1700]},
+    {'L':[255, 126, 0, 1800]},
+    {'L':[255, 131, 0, 1900]},
+    {'L':[255, 136, 13, 2000]},
+    {'L':[255, 141, 27, 2100]},
+    {'L':[255, 146, 39, 2200]},
+    {'L':[255, 150, 50, 2300]},
+    {'L':[255, 155, 60, 2400]},
+    {'L':[255, 159, 70, 2500]},
+    {'L':[255, 162, 79, 2600]},
+    {'L':[255, 166, 87, 2700]},
+    {'L':[255, 170, 95, 2800]},
+    {'L':[255, 173, 102, 2900]},
+    {'L':[255, 177, 109, 3000]},
+    {'L':[255, 180, 116, 3100]},
+    {'L':[255, 183, 123, 3200]},
+    {'L':[255, 186, 129, 3300]},
+    {'L':[255, 189, 135, 3400]},
+    {'L':[255, 192, 140, 3500]},
+    {'L':[255, 195, 146, 3600]},
+    {'L':[255, 198, 151, 3700]},
+    {'L':[255, 200, 156, 3800]},
+    {'L':[255, 203, 161, 3900]},
+    {'L':[255, 205, 166, 4000]},
+    {'L':[255, 208, 170, 4100]},
+    {'L':[255, 210, 175, 4200]},
+    {'L':[255, 213, 179, 4300]},
+    {'L':[255, 215, 183, 4400]},
+    {'L':[255, 217, 187, 4500]},
+    {'L':[255, 219, 191, 4600]},
+    {'L':[255, 221, 195, 4700]},
+    {'L':[255, 223, 198, 4800]},
+    {'L':[255, 226, 202, 4900]},
+    {'L':[255, 228, 205, 5000]},
+    {'L':[255, 229, 209, 5100]},
+    {'L':[255, 231, 212, 5200]},
+    {'L':[255, 233, 215, 5300]},
+    {'L':[255, 235, 219, 5400]},
+    {'L':[255, 237, 222, 5500]},
+    {'L':[255, 239, 225, 5600]},
+    {'L':[255, 241, 228, 5700]},
+    {'L':[255, 242, 231, 5800]},
+    {'L':[255, 244, 234, 5900]},
+    {'L':[255, 246, 236, 6000]},
+    {'L':[255, 247, 239, 6100]},
+    {'L':[255, 249, 242, 6200]},
+    {'L':[255, 251, 244, 6300]},
+    {'L':[255, 252, 247, 6400]},
+    {'L':[255, 254, 250, 6500]},
+    {'L':[255, 255, 255, 6600]},
+    {'L':[254, 248, 255, 6700]},
+    {'L':[249, 246, 255, 6800]},
+    {'L':[246, 244, 255, 6900]},
+    {'L':[242, 242, 255, 7000]},
+    {'L':[239, 240, 255, 7100]},
+    {'L':[236, 238, 255, 7200]},
+    {'L':[234, 237, 255, 7300]},
+    {'L':[231, 236, 255, 7400]},
+    {'L':[229, 234, 255, 7500]},
+    {'L':[227, 233, 255, 7600]},
+    {'L':[226, 232, 255, 7700]},
+    {'L':[224, 231, 255, 7800]},
+    {'L':[222, 230, 255, 7900]},
+    {'L':[221, 229, 255, 8000]},
+    {'L':[219, 228, 255, 8100]},
+    {'L':[218, 228, 255, 8200]},
+    {'L':[217, 227, 255, 8300]},
+    {'L':[215, 226, 255, 8400]},
+    {'L':[214, 225, 255, 8500]},
+    {'L':[213, 225, 255, 8600]},
+    {'L':[212, 224, 255, 8700]},
+    {'L':[211, 224, 255, 8800]},
+    {'L':[210, 223, 255, 8900]},
+    {'L':[209, 222, 255, 9000]},
+    {'L':[208, 222, 255, 9100]},
+    {'L':[207, 221, 255, 9200]},
+    {'L':[206, 221, 255, 9300]},
+    {'L':[206, 220, 255, 9400]},
+    {'L':[205, 220, 255, 9500]},
+    {'L':[203, 219, 255, 9700]},
+    {'L':[203, 218, 255, 9800]},
+    {'L':[202, 218, 255, 9900]},
+    {'L':[201, 218, 255, 10000]},
+    {'L':[201, 217, 255, 10100]},
+    {'L':[200, 217, 255, 10200]},
+    {'L':[199, 216, 255, 10300]},
+    {'L':[198, 216, 255, 10500]},
+    {'L':[197, 215, 255, 10700]},
+    {'L':[196, 215, 255, 10800]},
+    {'L':[195, 214, 255, 11000]},
+    {'L':[194, 213, 255, 11300]},
+    {'L':[193, 213, 255, 11400]},
+    {'L':[193, 212, 255, 11500]},
+    {'L':[192, 212, 255, 11700]},
+    {'L':[191, 212, 255, 11800]},
+    {'L':[191, 211, 255, 12000]},
+    {'L':[190, 211, 255, 12100]},
+    {'L':[190, 210, 255, 12200]},
+    {'L':[189, 210, 255, 12400]},
+    {'L':[188, 209, 255, 12700]},
+    {'L':[187, 209, 255, 12800]},
+    {'L':[186, 208, 255, 13200]},
+    {'L':[186, 208, 255, 13300]},
+    {'L':[185, 208, 255, 13400]},
+    {'L':[185, 207, 255, 13600]},
+    {'L':[184, 207, 255, 13800]},
+    {'L':[183, 206, 255, 14150]},
+    {'L':[182, 206, 255, 14500]},
+    {'L':[182, 205, 255, 14600]},
+    {'L':[181, 205, 255, 14900]},
+    {'L':[180, 204, 255, 15300]},
+    {'L':[179, 204, 255, 15500]},
+    {'L':[179, 204, 255, 15600]},
+    {'L':[179, 203, 255, 15800]},
+    {'L':[178, 203, 255, 16100]},
+    {'L':[177, 203, 255, 16300]},
+    {'L':[177, 202, 255, 16500]},
+    {'L':[176, 202, 255, 16900]},
+    {'L':[175, 201, 255, 17400]},
+    {'L':[175, 201, 255, 17500]},
+    {'L':[174, 200, 255, 18000]},
+    {'L':[173, 200, 255, 18300]},
+    {'L':[173, 199, 255, 18600]},
+    {'L':[172, 199, 255, 18900]},
+    {'L':[172, 199, 255, 19200]},
+    {'L':[171, 199, 255, 19300]},
+    {'L':[171, 199, 255, 19400]},
+    {'L':[170, 198, 255, 20100]},
+    {'L':[170, 197, 255, 20400]},
+    {'L':[169, 197, 255, 20700]},
+    {'L':[168, 197, 255, 21200]},
+    {'L':[168, 196, 255, 21600]},
+    {'L':[167, 196, 255, 22000]},
+    {'L':[167, 196, 255, 22300]},
+    {'L':[167, 196, 255, 22400]},
+    {'L':[166, 195, 255, 22800]},
+    {'L':[165, 195, 255, 23400]},
+    {'L':[165, 194, 255, 23800]},
+    {'L':[164, 194, 255, 24500]},
+    {'L':[164, 193, 255, 24900]},
+    {'L':[163, 193, 255, 25400]},
+    {'L':[162, 193, 255, 26000]},
+    {'L':[162, 192, 255, 26400]},
+    {'L':[161, 192, 255, 27150]},
+    {'L':[161, 191, 255, 27650]},
+    {'L':[160, 191, 255, 28200]},
+    {'L':[159, 191, 255, 28950]},
+    {'L':[159, 190, 255, 29500]},
+    {'L':[158, 190, 255, 30300]},
+    {'L':[158, 189, 255, 30950]},
+    {'L':[157, 189, 255, 31650]},
+    {'L':[156, 189, 255, 32490]},
+    {'L':[156, 188, 255, 33300]},
+    {'L':[155, 188, 255, 34200]},
+    {'L':[154, 187, 255, 35800]},
+    {'L':[153, 186, 255, 37200]},
+    {'L':[152, 186, 255, 38300]},
+    {'L':[152, 185, 255, 39000]},
+    {'L':[152, 185, 255, 39200]},
+    {'L':[151, 185, 255, 39700]}
+  ],
+} %}
+
+{#-
+TESTING CODE FOR DEVELOPER TAB TO TEST THIS CUSTOM JINJA:
+{%- from 'color_multi_tool.jinja' import random_name, random_xy, random_hs, 
+random_rgb, name2rgb, rgb2name, rgb2xy, xy2rgb, hs2rgb, rgb2hs, xy2hs, hs2xy, chkRGB,
+chkXY, chkHS, chkNAME, color_list, k2rgb, chkK, rgb2K %}
+
+0 macro random name: {{ random_name() }}
+1 macro random xy list: {% set _rxy1 = random_xy().split(",") | list %}
+{%- set _rxy1_list = [_rxy1[0]|float|round(3),_rxy1[1]|float|round(3)] %}
+{{- _rxy1_list }}
+2 macro random hs list: {% set _rhs2 = random_hs().split(",") | list %}
+{%- set _rhs2_list =  [_rhs2[0]|float|round(3),_rhs2[1]|float|round(2)] %}
+{{- _rhs2_list }}
+3 macro random rgb list: {% set _rrgb3 = random_rgb().split(",") | list %}
+{%- set _rrgb3_list = [_rrgb3[0]|int(0),_rrgb3[1]|int(0),_rrgb3[2]|int(0)] %}
+{{- _rrgb3_list }} 
+C macro temperature to rgb list: {% set _rrgbK = range(1000,40000) | random -%}
+{%- set _rrgbT = k2rgb(_rrgbK).split(",") | list %}
+{%- set _rrgbT_list = [_rrgbT[0]|int(0),_rrgbT[1]|int(0),_rrgbT[2]|int(0)] | list %}
+{{- _rrgbK }} K -> {{ _rrgbT_list }}
+F  (using #C) macro RGB to color Temperature: {% set _rgb2Temp = rgb2K(_rrgbT_list) %}
+{{- _rrgbT_list }} -> {{ _rgb2Temp -}}
+4 macro name to rgb list: {% set _nrgb4_name = random_name() %}
+{%- set _nrgb4 = name2rgb(_nrgb4_name).split(",") | list %}
+{%- set _nrgb4_list = [_nrgb4[0]|int(0),_nrgb4[1]|int(0),_nrgb4[2]|int(0)] | list %}
+{{- _nrgb4_name }} -> {{ _nrgb4_list }}
+
+B (using #4) macro RGB to color name: {% set _rgb2name = rgb2name(20,_nrgb4_list) %}
+{{- _nrgb4_list }} -> {{ _rgb2name -}}
+E (using #4) macro rgb to Best Match Name: {%- set _rgb2Bname = rgb_bestname(_nrgb4_list) %}
+{{- _nrgb4_list }} -> {{ _rgb2Bname }}
+5 (using #4) macro rgb to xy list: {% set _rgb2zy5 = rgb2xy(_nrgb4_list).split(",") | list %}
+{%- set _rgb2zy5_list = [_rgb2zy5[0]|float(0)|round(3),_rgb2zy5[1]|float(0)|round(3)] %}
+{{- _nrgb4_list }} -> {{_rgb2zy5_list }}
+6 (using #5) macro xy to rgb list: {% set _xy2rgb6 = xy2rgb(_rgb2zy5_list).split(",") | list %}
+{%- set _xy2rgb6_list = [_xy2rgb6[0]|int(0),_xy2rgb6[1]|int(0),_xy2rgb6[2]|int(0)] %}
+{{- _rgb2zy5_list }} -> {{ _xy2rgb6_list }}
+8 (using #6) macro rgb to hs list: {% set _rgb2hs8 = rgb2hs(_xy2rgb6_list).split(",") | list %}
+{%- set _rgb2hs8_list = [_rgb2hs8[0]|float(0)|round(3),_rgb2hs8[1]|float(0)|round(3)] %}
+{{- _xy2rgb6_list }} -> {{ _rgb2hs8_list }}
+7 (using #8) macro hs to rgb list: {% set _hs2rgb7 = hs2rgb(_rgb2hs8_list).split(",") | list %}
+{%- set _hs2rgb7_list = [_hs2rgb7[0]|int(0),_hs2rgb7[1]|int(0),_hs2rgb7[2]|int(0)] %}
+{{- _rgb2hs8_list }} -> {{ _hs2rgb7_list }}
+A (using #8) macro hs to xy list: {% set _hs2xyA = hs2xy(_rgb2hs8_list).split(",") | list %}
+{%- set _hs2xyA_list = [_hs2xyA[0]|float(0)|round(3),_hs2xyA[1]|float(0)|round(3)] %}
+{{- _rgb2hs8_list }} -> {{ _hs2xyA_list }}
+9 (using #A) macro xy to hs list: {% set _xy2hs9 = xy2hs(_hs2xyA_list).split(",") | list %}
+{%- set _xy2hs9_list = [_xy2hs9[0]|float(0)|round(3),_xy2hs9[1]|float(0)|round(3)] %}
+{{- _hs2xyA_list }} -> {{ _xy2hs9_list }}
+
+Test the tests by changing the values:
+{%- set _rgbl = [255,165,0] %}
+Check RGB Valid:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
+{%- set _rgbl = [235,165,300] %}
+Check RGB FAIL OOR:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
+{%- set _rgbl = ['test',165,0] %}
+Check RGB FAIL text:   {{ _rgbl ~" -> "~ chkRGB(_rgbl) | bool }}
+{%- set _xyl = [0.497,0.472] %}
+check XY Valid:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
+{%- set _xyl = [0.497,12] %}
+check XY FAIL OOR:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
+{%- set _xyl = [0.497,'test'] %}
+check XY FAIL text:   {{ _xyl ~" -> "~ chkXY(_xyl) | bool }}
+{%- set _hsl = [38.824,100.0] %}
+Check HS Valid:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
+{%- set _hsl = [38.824,900] %}
+Check HS FAIL OOR:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
+{%- set _hsl = ['test',100.0] %}
+Check HS FAIL text:   {{ _hsl ~" -> "~ chkHS(_hsl) | bool }}
+{%- set _name = 'orange' %}
+Check NAME Valid: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _name = 'rainbow' %}
+Check NAME FAIL OOR: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _name = 255 %}
+Check NAME FAIL number: {{ _name ~" -> "~ chkNAME(_name) | bool }}
+{%- set _kelvin = _rrgbK %}
+Check KELVIN Valid: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
+{%- set _kelvin = 500 %}
+Check KELVIN FAIL OOR: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
+{%- set _kelvin = 'test' %}
+Check KELVIN FAIL text: {{ _kelvin ~" -> "~ chkK(_kelvin) | bool }}
+
+Test color_list:
+{{ color_list().split('\n') | list }}
+
+#}
