@@ -1,0 +1,1079 @@
+title: Irrigation
+views:
+  - path: default_view
+    title: GARDEN GLANCE
+    icon: mdi:water
+    type: custom:grid-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: binary_sensor.irrigation_main_sequence_run
+                color: auto
+                color_type: card
+                label: |
+                  [[[
+                    return 'Seq: ' + states['sensor.cx9020_mbunitid_2'].state;
+                  ]]]
+                show_label: true
+                tap_action:
+                  action: call-service
+                  service: script.write_irrigation_run_main_seq_on
+                hold_action:
+                  action: call-service
+                  service: script.write_irrigation_run_main_seq_off
+                name: Main Sequence
+                styles:
+                  card:
+                    - font-size: 12px
+                    - font-weight: bold
+                    - height: 120px
+                state:
+                  - value: 'off'
+                    color: rgb(255, 0, 0)
+                    icon: mdi:run
+                  - value: 'on'
+                    color: rgb(0, 255, 0)
+                    icon: mdi:run-fast
+              - type: tile
+                entity: sensor.irrigation_control_modbus_sequence_run
+                icon: mdi:stop
+                name: MB Seq Value
+                color: accent
+                show_entity_picture: false
+                vertical: true
+                features_position: bottom
+              - type: tile
+                entity: binary_sensor.irrigation_control_valve_auto_automatic_enabled
+                icon: mdi:all-inclusive-box
+                name: Auto Enabled
+                color: accent
+                show_entity_picture: false
+                tap_action:
+                  action: call-service
+                  service: script.flip_auto_enabled
+                  target: {}
+                vertical: true
+                hide_state: true
+                features_position: bottom
+          - type: vertical-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: conditional
+                    conditions:
+                      - condition: state
+                        entity: binary_sensor.irrigation_control_pump_running_feedback
+                        state: 'on'
+                    card:
+                      type: tile
+                      entity: binary_sensor.irrigation_main_sequence_run
+                      icon: mdi:pump
+                      name: Pump Running
+                      hide_state: true
+                      tap_action:
+                        action: call-service
+                        service: script.write_sprinkler_control_manual_stop_request
+                        target: {}
+                      vertical: true
+                      features_position: bottom
+                  - type: tile
+                    tap_action:
+                      action: navigate
+                      navigation_path: /dashboard-dashboard/timers
+                    show_entity_picture: false
+                    icon: mdi:clock
+                    color: purple
+                    name: Timers
+                    entity: binary_sensor.irrigation_control_pump_running_feedback
+                    hide_state: true
+                    vertical: true
+                    features_position: bottom
+                  - type: entity
+                    entity: input_boolean.expand_card
+                    tap_action:
+                      action: toggle
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_pump_running_feedback
+                    state: 'on'
+                  - condition: numeric_state
+                    entity: sensor.irrigation_control_runtimer_elapsed_time
+                    above: 1
+                card:
+                  type: custom:gauge-card
+                  entity: sensor.irrigation_control_runtimer_elapsed_time
+                  title: Remain Mins.
+                  unit_of_measure: Min
+                  min: 0
+                  max: 120
+                  severity:
+                    red: 0
+                    amber: 5
+                    green: 10
+                  size: 150
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_pump_running_feedback
+                    state: 'on'
+                  - condition: numeric_state
+                    entity: sensor.irrigation_control_runtimer_elapsed_secondstime
+                    above: 1
+                card:
+                  type: custom:gauge-card
+                  entity: sensor.irrigation_control_runtimer_elapsed_secondstime
+                  title: Remain Sec.
+                  unit_of_measure: Sec
+                  min: 0
+                  max: 60
+                  severity:
+                    red: 0
+                    amber: 10
+                    green: 20
+                  size: 60
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: input_boolean.expand_card
+                    state: 'on'
+                card:
+                  type: entities
+                  entities:
+                    - entity: sensor.irrigation_pump_runtime_totaliser_today
+                    - entity: sensor.irrigation_pump_runtime_totaliser_weekly
+                    - entity: sensor.irrigation_pump_runtime_totaliser_monthly
+                    - entity: sensor.irrigation_pump_runtime_totaliser_all
+                  title: Pump Runtime
+                  show_header_toggle: false
+                  state_color: true
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_or_zone
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_hose_or_zone
+                  color: auto
+                  color_type: icon
+                  name: Hose or Zones?
+                  icon: mdi:water-pump
+                  tap_action:
+                    action: call-service
+                    service: script.flip_hose_or_zone
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_or_zone_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_or_zone
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_or_zone_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_time_or_manual
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_time_or_manual
+                  color: auto
+                  color_type: icon
+                  name: Time or Manual?
+                  icon: mdi:clock
+                  tap_action:
+                    action: call-service
+                    service: script.flip_time_or_man
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_time_or_man_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_time_or_manual
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_time_or_man_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_plugged_in
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_hose_plugged_in
+                  color: auto
+                  color_type: icon
+                  name: Hose In?
+                  icon: mdi:pipe
+                  tap_action:
+                    action: call-service
+                    service: script.flip_hose_in
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_in_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_plugged_in
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_in_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_plugged_out
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_hose_plugged_out
+                  color: auto
+                  color_type: icon
+                  name: Hose Out?
+                  icon: mdi:pipe-disconnected
+                  tap_action:
+                    action: call-service
+                    service: script.flip_hose_out
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_out_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_hose_plugged_out
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_hose_out_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_pool_zone_open
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_pool_zone_open
+                  color: auto
+                  color_type: icon
+                  name: Pool Zone Open?
+                  icon: mdi:pool
+                  tap_action:
+                    action: call-service
+                    service: script.flip_pool_zone_open
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_pool_zone_open_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_pool_zone_open
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_pool_zone_open_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_pool_zone_closed
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_value_pool_zone_closed
+                  color: auto
+                  color_type: icon
+                  name: Pool Zone Closed?
+                  icon: mdi:pool-thermometer
+                  tap_action:
+                    action: call-service
+                    service: script.flip_pool_zone_closed
+                    target: {}
+                  hold_action:
+                    action: call-service
+                    service: script.write_irrigation_pool_zone_closed_response
+                    target: {}
+                  styles:
+                    icon:
+                      - animation: blink 2s ease infinite
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_control_request_pool_zone_closed
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  color: yellow
+                  color_type: icon
+                  name: Accept
+                  icon: mdi:hand-okay
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_pool_zone_closed_response
+                    target: {}
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone01_auto
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone01_auto_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone01_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: name
+                  name: Z01 Auto
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone01_auto
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone01_auto_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone01_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: none
+                  name: Z01 Man
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone01_manopen
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone01_manopen_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone01_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: name
+                  name: Z01 ManOpen
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone01_manopen
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone01_manopen_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone01_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: none
+                  name: Z01 ManClose
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_main_sequence_run
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_zone01_open_feedback
+                  color: auto
+                  color_type: icon
+                  name: Z01 Open Fbk
+                  styles:
+                    card:
+                      - height: 120px
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                      icon: mdi:sprinkler
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+                      icon: mdi:sprinkler-variant
+                      styles:
+                        icon:
+                          - animation: blink 2s ease infinite
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone02_auto
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone02_auto_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone02_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: name
+                  name: Z02 Auto
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone02_auto
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone02_auto_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone02_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: none
+                  name: Z02 Man
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone02_manopen
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone02_manopen_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone02_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: name
+                  name: Z02 ManOpen
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone02_manopen
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone02_manopen_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone02_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: none
+                  name: Z02 ManClose
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_main_sequence_run
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_zone02_open_feedback
+                  color: auto
+                  color_type: icon
+                  name: Z02 Open Fbk
+                  styles:
+                    card:
+                      - height: 120px
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                      icon: mdi:sprinkler
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+                      icon: mdi:sprinkler-variant
+                      styles:
+                        icon:
+                          - animation: blink 2s ease infinite
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone03_auto
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone03_auto_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone03_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: name
+                  name: Z03 Auto
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone03_auto
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone03_auto_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone03_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: none
+                  name: Z03 Man
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone03_manopen
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone03_manopen_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone03_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: name
+                  name: Z03 ManOpen
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone03_manopen
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone03_manopen_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone03_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: none
+                  name: Z03 ManClose
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_main_sequence_run
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_zone03_open_feedback
+                  color: auto
+                  color_type: icon
+                  name: Z03 Open Fbk
+                  styles:
+                    card:
+                      - height: 120px
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                      icon: mdi:sprinkler
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+                      icon: mdi:sprinkler-variant
+                      styles:
+                        icon:
+                          - animation: blink 2s ease infinite
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone04_auto
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone04_auto_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone04_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: name
+                  name: Z04 Auto
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone04_auto
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone04_auto_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone04_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: none
+                  name: Z04 Man
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone04_manopen
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone04_manopen_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone04_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: name
+                  name: Z04 ManOpen
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone04_manopen
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone04_manopen_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone04_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: none
+                  name: Z04 ManClose
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_main_sequence_run
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_zone04_open_feedback
+                  color: auto
+                  color_type: icon
+                  name: Z04 Open Fbk
+                  styles:
+                    card:
+                      - height: 120px
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                      icon: mdi:sprinkler
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+                      icon: mdi:sprinkler-variant
+                      styles:
+                        icon:
+                          - animation: blink 2s ease infinite
+          - type: horizontal-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone05_auto
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone05_auto_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone05_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: name
+                  name: Z05 Auto
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone05_auto
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone05_auto_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone05_auto
+                  icon: mdi:pipe-valve
+                  hold_action:
+                    action: none
+                  name: Z05 Man
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone05_manopen
+                    state: 'off'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone05_manopen_on
+                    target: {}
+                  entity: binary_sensor.irrigation_zone05_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: name
+                  name: Z05 ManOpen
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_zone05_manopen
+                    state: 'on'
+                card:
+                  show_name: true
+                  show_icon: true
+                  type: button
+                  tap_action:
+                    action: call-service
+                    service: script.write_irrigation_zone05_manopen_off
+                    target: {}
+                  entity: binary_sensor.irrigation_zone05_manopen
+                  icon: mdi:water-pump
+                  hold_action:
+                    action: none
+                  name: Z05 ManClose
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: binary_sensor.irrigation_main_sequence_run
+                    state: 'on'
+                card:
+                  type: custom:button-card
+                  entity: binary_sensor.irrigation_control_zone05_open_feedback
+                  color: auto
+                  color_type: icon
+                  name: Z05 Open Fbk
+                  styles:
+                    card:
+                      - height: 120px
+                  state:
+                    - value: 'off'
+                      color: rgb(255, 0, 0)
+                      icon: mdi:sprinkler
+                    - value: 'on'
+                      color: rgb(0, 255, 0)
+                      icon: mdi:sprinkler-variant
+                      styles:
+                        icon:
+                          - animation: blink 2s ease infinite
+  - title: Timers
+    path: timers
+    icon: mdi:clock-fast
+    subview: true
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:slider-button-card
+                entity: input_number.sprinkler_control_runtime_in
+                icon:
+                  icon: mdi:timeline-clock-outline
+                  use_state_color: false
+                  show: true
+                  tap_action:
+                    action: none
+                slider:
+                  direction: left-right
+                  background: gradient
+                  use_state_color: false
+                  use_percentage_bg_opacity: true
+                  show_track: true
+                  toggle_on_click: false
+                  force_square: false
+                action_button:
+                  show: true
+                  mode: custom
+                  tap_action:
+                    action: call-service
+                    service: script.write_sprinkler_control_runtime_in
+                    target: {}
+                  show_spinner: true
+                show_state: true
+                show_attribute: false
+                show_name: true
+                compact: false
+              - type: custom:slider-button-card
+                entity: input_number.sprinkler_control_transition_time_in
+                icon:
+                  icon: mdi:timeline-clock-outline
+                  use_state_color: false
+                  show: true
+                  tap_action:
+                    action: none
+                slider:
+                  direction: left-right
+                  background: gradient
+                  use_state_color: false
+                  use_percentage_bg_opacity: true
+                  show_track: true
+                  toggle_on_click: false
+                  force_square: false
+                action_button:
+                  show: true
+                  mode: custom
+                  tap_action:
+                    action: call-service
+                    service: script.write_sprinkler_control_transition_time_in
+                    target: {}
+                  show_spinner: true
+                show_state: true
+                show_attribute: false
+                show_name: true
+                compact: false
+              - type: custom:slider-button-card
+                entity: input_number.sprinkler_control_pressure_time_in
+                icon:
+                  icon: mdi:timeline-clock-outline
+                  use_state_color: false
+                  show: true
+                  tap_action:
+                    action: none
+                slider:
+                  direction: left-right
+                  background: gradient
+                  use_state_color: false
+                  use_percentage_bg_opacity: true
+                  show_track: true
+                  toggle_on_click: false
+                  force_square: false
+                action_button:
+                  show: true
+                  mode: custom
+                  tap_action:
+                    action: call-service
+                    service: script.write_sprinkler_control_pressure_time_in
+                    target: {}
+                  show_spinner: true
+                show_state: true
+                show_attribute: false
+                show_name: true
+                compact: false
+              - type: custom:slider-button-card
+                entity: input_number.sprinkler_control_zoneoffset_time_in
+                icon:
+                  icon: mdi:timeline-clock-outline
+                  use_state_color: false
+                  show: true
+                  tap_action:
+                    action: none
+                slider:
+                  direction: left-right
+                  background: gradient
+                  use_state_color: false
+                  use_percentage_bg_opacity: true
+                  show_track: true
+                  toggle_on_click: false
+                  force_square: false
+                action_button:
+                  show: true
+                  mode: custom
+                  tap_action:
+                    action: call-service
+                    service: script.write_sprinkler_control_zoneoffset_time_in
+                    target: {}
+                  show_spinner: true
+                show_state: true
+                show_attribute: false
+                show_name: true
+                compact: false

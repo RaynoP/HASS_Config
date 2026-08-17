@@ -1,0 +1,682 @@
+views:
+  - title: GSP BUTTONS
+    path: gsp-buttons
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                entity: sensor.gss_wdm_runtime
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wdm
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:run
+                color: accent
+                name: WDM Run
+                features_position: bottom
+              - type: tile
+                entity: sensor.gss_wdm_hour_2
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wdm
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand
+                color: purple
+                name: WDM Hour
+              - type: tile
+                entity: sensor.gss_wdm_minute_2
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wdm
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand-complete
+                color: purple
+                name: WDM Min
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                name: WDE Run
+                entity: sensor.gss_wde_runtime
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wde
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:run
+                color: accent
+                features_position: bottom
+              - type: tile
+                name: WDE Hour
+                entity: sensor.gss_wde_hour
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wde
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand
+                color: purple
+              - type: tile
+                name: WDE Min
+                entity: sensor.gss_wde_minute
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wde
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand-complete
+                color: purple
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                entity: sensor.gss_wem_runtime
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wem
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:run
+                color: accent
+                name: WEM Run
+                features_position: bottom
+              - type: tile
+                entity: sensor.gss_wem_hour
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wem
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand
+                color: purple
+                name: WEM Hour
+              - type: tile
+                entity: sensor.gss_wem_minute
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wem
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand-complete
+                color: purple
+                name: WEM Min
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                name: WEA Run
+                entity: sensor.gss_wea_runtime
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wea
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:run
+                color: accent
+                features_position: bottom
+              - type: tile
+                name: WEA Hour
+                entity: sensor.gss_wea_hour
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wea
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand
+                color: purple
+              - type: tile
+                name: WEA Min
+                entity: sensor.gss_wea_minute
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wea
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand-complete
+                color: purple
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                name: WEE Run
+                entity: sensor.gss_wee_runtime
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wee
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:run
+                color: accent
+                features_position: bottom
+              - type: tile
+                name: WEE Hour
+                entity: sensor.gss_wee_hour
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wee
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand
+                color: purple
+              - type: tile
+                name: WEE Min
+                entity: sensor.gss_wee_minute
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-geyser/gss-wee
+                vertical: true
+                show_entity_picture: false
+                icon: mdi:timer-sand-complete
+                color: purple
+  - type: custom:grid-layout
+    title: GSP GLANCE
+    subview: false
+    badges: []
+    cards:
+      - show_name: true
+        show_icon: true
+        show_state: true
+        title: Week Day - Morning SPs
+        type: glance
+        entities:
+          - entity: sensor.gss_wdm_runtime
+          - entity: sensor.gss_wdm_hour_2
+          - entity: sensor.gss_wdm_minute_2
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: teal;
+            }
+      - show_name: true
+        show_icon: true
+        show_state: true
+        title: Week Day - Evening SPs
+        type: glance
+        entities:
+          - sensor.gss_wde_runtime
+          - sensor.gss_wde_hour
+          - sensor.gss_wde_minute
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: teal;
+            }
+      - title: Week End - Morning SPs
+        show_name: true
+        show_icon: true
+        show_state: true
+        type: glance
+        entities:
+          - sensor.gss_wem_runtime
+          - sensor.gss_wem_hour
+          - sensor.gss_wem_minute
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: teal;
+            }
+      - title: Week End - Afternoon SPs
+        show_name: true
+        show_icon: true
+        show_state: true
+        type: glance
+        entities:
+          - sensor.gss_wea_runtime
+          - sensor.gss_wea_hour
+          - sensor.gss_wea_minute
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: teal;
+            }
+      - title: Week End - Evening SPs
+        show_name: true
+        show_icon: true
+        show_state: true
+        type: glance
+        entities:
+          - sensor.gss_wee_runtime
+          - sensor.gss_wee_hour
+          - sensor.gss_wee_minute
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: teal;
+            }
+  - title: GSS WDM
+    path: gss-wdm
+    subview: true
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: input_number.gss_wdm_runtime_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wdm_runtime
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wdm_hour_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wdm_hour
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wdm_minute_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wdm_minute
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+  - title: GSS WDE
+    path: gss-wde
+    subview: true
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: input_number.gss_wde_runtime_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wde_runtime
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wde_hour_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wde_hour
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wde_minute_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wde_minute
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+  - title: GSS WEM
+    path: gss-wem
+    subview: true
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: input_number.gss_wem_runtime_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wem_runtime
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wem_hour_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wem_hour
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wem_minute_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wem_minute
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+  - title: GSS WEA
+    path: gss-wea
+    subview: true
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: input_number.gss_wea_runtime_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wea_runtime
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wea_hour_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wea_hour
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wea_minute_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wea_minute
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+  - title: GSS WEE
+    path: gss-wee
+    subview: true
+    type: custom:vertical-layout
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:slider-button-card
+            entity: input_number.gss_wee_runtime_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wee_runtime
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wee_hour_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wee_hour
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true
+          - type: custom:slider-button-card
+            entity: input_number.gss_wee_minute_in
+            icon:
+              icon: ''
+              use_state_color: false
+              show: false
+            slider:
+              direction: left-right
+              background: gradient
+              use_state_color: false
+              use_percentage_bg_opacity: true
+              show_track: true
+              toggle_on_click: false
+              force_square: false
+            action_button:
+              show: true
+              mode: custom
+              tap_action:
+                action: call-service
+                service: script.write_gss_wee_minute
+                target: {}
+              show_spinner: true
+            show_state: true
+            show_attribute: false
+            show_name: true
+            compact: true

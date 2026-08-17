@@ -76,3 +76,8 @@ esphome/.esphome/
 esphome/.git_disabled/
 esphome/.device-builder*
 esphome/*.bin
+
+# ---- Python bytecode cache (auto-generated, version-specific, disposable) ----
+__pycache__/
+*.py[cod]
+*$py.class

@@ -1,0 +1,625 @@
+title: Home
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - type: conditional
+        conditions:
+          - condition: numeric_state
+            entity: sensor.minutes_to_next_loadshedding
+            below: 7777
+        card:
+          type: gauge
+          entity: sensor.minutes_to_next_loadshedding
+          needle: true
+          severity:
+            green: 120
+            yellow: 60
+            red: 10
+          max: 1440
+          unit: Min
+      - type: custom:sunsynk-power-flow-card
+        cardstyle: full
+        show_solar: false
+        inverter:
+          modern: false
+          model: lux
+          autarky: 'no'
+        battery:
+          show: true
+          energy: 4500
+          shutdown_soc: 1
+          show_daily: true
+          invert_power: true
+        solar:
+          show_daily: false
+          mppts: 1
+          pv1_name: none
+          pv2_name: none
+        load:
+          show_daily: true
+          dynamic_colour: true
+          dynamic_icon: true
+          max_power: 4000
+          essential_name: Essential
+        grid:
+          show_daily_buy: true
+          show_nonessential: false
+          invert_grid: true
+          no_grid_colour: red
+          grid_off_colour: red
+          max_power: 4000
+          label_daily_grid_buy: Kak en betaal
+        entities:
+          inverter_voltage_154: sensor.lux_3113630025_grid_voltage_live
+          load_frequency_192: sensor.lux_3113630025_grid_frequency_live
+          inverter_current_164: sensor.inverter_output_current
+          inverter_status_59: sensor.lux_3113630025_status
+          inverter_power_175: sensor.lux_3113630025_battery_flow_live
+          day_battery_charge_70: sensor.lux_3113630025_battery_charge_daily
+          day_battery_discharge_71: sensor.lux_3113630025_battery_discharge_daily
+          battery_voltage_183: sensor.lux_3113630025_battery_voltage_live
+          battery_soc_184: sensor.lux_3113630025_battery
+          battery_power_190: sensor.lux_3113630025_battery_flow_live
+          battery_current_191: sensor.lux_3113630025_battery_capacity_ah
+          grid_power_169: sensor.lux_3113630025_grid_flow_live
+          day_grid_import_76: sensor.lux_3113630025_power_from_grid_daily
+          grid_ct_power_172: sensor.lux_3113630025_grid_flow_live
+          day_load_energy_84: sensor.lux_3113630025_home_consumption_daily
+          essential_power: sensor.lux_3113630025_home_consumption_live
+          radiator_temp_91: sensor.lux_3113630025_radiator_1_temperature_live
+          dc_transformer_temp_90: sensor.lux_3113630025_radiator_2_temperature_live
+          remaining_solar: sensor.forecast_remaining_today
+          energy_cost: sensor.energy_price
+          prepaid_units: sensor.current_utility_prepaid_reading
+          day_pv_energy_108: none
+          pv_total: none
+          pv1_power_186: none
+          pv2_power_187: none
+      - type: custom:lux-power-distribution-card
+        inverter_count: 1
+        battery_soc:
+          entities:
+            - sensor.lux_3113630025_battery
+        battery_flow:
+          entities:
+            - sensor.lux_3113630025_battery_flow_live
+        home_consumption:
+          entities:
+            - sensor.lux_3113630025_home_consumption_live
+        grid_flow:
+          entities:
+            - sensor.lux_3113630025_grid_flow_live
+        lux_dongle:
+          - BA31600006
+        inverter_alias:
+          - Inverter 1
+        battery_voltage:
+          entities:
+            - sensor.lux_3113630025_battery_voltage_live
+        backup_power:
+          entities:
+            - sensor.lux_3113630025_power_to_eps_live
+        grid_voltage:
+          entities:
+            - sensor.lux_3113630025_grid_voltage_live
+        update_time:
+          entities:
+            - sensor.lux_3113630025_data_received_time
+          show_last_update: true
+        grid_indicator:
+          hue: true
+        status_codes:
+          entities:
+            - sensor.lux_3113630025_status
+          no_grid_is_warning: true
+        refresh_button: right
+      - type: entities
+        entities:
+          - entity: sensor.energy_price
+          - entity: sensor.energy_used_this_month
+          - entity: sensor.current_energy_cost
+          - entity: sensor.current_utility_prepaid_reading
+            secondary_info: last-updated
+          - entity: sensor.geyser_used_today
+          - entity: sensor.geyser_used_this_month
+          - entity: sensor.geyser_current_power
+          - entity: sensor.geyser_energy_last_minute
+          - entity: sensor.current_energy_costing
+          - entity: sensor.geyser_cost_last_minute
+          - entity: sensor.lux_3113630025_battery_charge_daily
+        title: Costing
+      - type: logbook
+        target:
+          entity_id:
+            - weather.wierdapark
+      - type: markdown
+        content: >+
+          {% set ns = namespace(schedule_date='') %}
+
+          ### {{ states('sensor.esp_loadshedding_events') }} 
+
+          {% set events =
+          states.sensor.esp_loadshedding_events.attributes.events %}
+
+          {% if events is defined and events %}
+
+          {% for stage in
+          states.sensor.esp_loadshedding_events.attributes.events %}
+
+          {%- set dt = strptime(stage.start, '%Y-%m-%dT%H:%M:%S%z') %}
+              {% if (ns.schedule_date != dt.date() ) -%}
+              {{ dt.date().strftime('%Y/%m/%d -- %A') }}
+              
+              {% set ns.schedule_date = dt.date() %}
+            {%- endif %}
+              {%- if (stage.note == "Stage 0") -%}🟢
+              {%- elif (stage.note == "Stage 1") -%}🟡
+              {%- elif (stage.note == "Stage 2") -%}🟠
+              {%- elif (stage.note == "Stage 3") -%}🔴
+              {%- elif (stage.note == "Stage 4") -%}🔵
+              {%- elif (stage.note == "Stage 5") -%}🟣
+              {%- elif (stage.note == "Stage 6") -%}🟤
+              {%- elif (stage.note == "Stage 7") -%}⚫
+              {%- elif (stage.note == "Stage 8") -%}⚪
+              {%- else %}💀
+              {%- endif %} {{ dt.time().strftime('%H:%M') }} - {{strptime(stage.end, '%Y-%m-%dT%H:%M:%S%z').time().strftime('%H:%M')}} : {{ stage.note }}
+            {%- endfor %}
+          {% else %}
+            # Current Stage: Fokkol!! ⚡
+          {% endif %}
+
+
+          {% set EskomShed = states('sensor.eskom') | int - 1 %}
+
+
+          Rest call counter: {{ states('sensor.esp_loadshedding_callcount') }} 
+
+          ### Eskom Level: {{ EskomShed }}
+
+          {% if EskomShed > 0 %}
+            Next LoadShedding: {{ states('sensor.next_loadshedding') }}
+          {% endif %}
+
+        title: Load Shedding
+      - show_current: true
+        show_forecast: true
+        type: weather-forecast
+        entity: weather.wierdapark
+        forecast_type: hourly
+        secondary_info_attribute: humidity
+        name: Today
+      - show_current: true
+        show_forecast: true
+        type: weather-forecast
+        entity: weather.wierdapark
+        forecast_type: daily
+        secondary_info_attribute: pressure
+        name: Forecast
+      - type: custom:weather-card
+        entity: weather.wierdapark
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: none
+        entity: binary_sensor.geyser_coil
+        icon: mdi:heating-coil
+        show_state: true
+        hold_action:
+          action: none
+      - type: entities
+        entities:
+          - entity: switch.geyser_on_req
+          - entity: switch.geyser_off_req
+          - entity: binary_sensor.geyser_coil
+          - entity: sensor.geyser_runtime
+          - entity: sensor.geyser_remaintime
+          - entity: input_number.gss_runtime_sp
+        title: Geyser Status
+        show_header_toggle: false
+        state_color: true
+      - graph: line
+        type: sensor
+        entity: sensor.sm_g988b_home_pressure_sensor
+        detail: 1
+      - graph: line
+        type: sensor
+        entity: sensor.sm_g988b_home_battery_level
+        detail: 2
+        hours_to_show: 120
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-media-player-card
+            entity: media_player.viera_dt60_series
+            fill_container: true
+            icon: mdi:remote
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: call-service
+              service: shell_command.turn_off_remote_pc
+              target: {}
+            entity: switch.worf_mediapc
+      - type: entities
+        entities:
+          - entity: sensor.external_ip
+          - entity: sensor.speedtest_download
+          - entity: sensor.speedtest_upload
+          - entity: sensor.speedtest_ping
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - show_state: true
+            show_name: true
+            camera_view: auto
+            type: picture-entity
+            entity: camera.embedded_net_dvr_profilename001
+            name: Gate
+          - show_state: true
+            show_name: true
+            camera_view: auto
+            type: picture-entity
+            entity: camera.embedded_net_dvr_profilename002
+            name: Gerage
+          - show_state: true
+            show_name: true
+            camera_view: auto
+            type: picture-entity
+            entity: camera.embedded_net_dvr_profilename003
+            name: Side Wall
+          - show_state: true
+            show_name: true
+            camera_view: auto
+            type: picture-entity
+            entity: camera.embedded_net_dvr_profilename004
+            name: Entertainment Area
+      - type: entities
+        entities:
+          - entity: light.wled_dollhouse1_main
+            name: Main
+          - entity: select.wled_dollhouse1_playlist
+            name: Playlist
+          - entity: select.wled_dollhouse1_preset
+            name: Preset
+          - entity: light.wled_dollhouse1_segment_1
+            name: Segment 1
+          - entity: light.wled_dollhouse1_segment_2
+            name: Segment 2
+          - entity: light.wled_dollhouse1_segment_3
+            name: Segment 3
+          - entity: light.wled_dollhouse1_segment_4
+            name: Segment 4
+          - entity: light.wled_dollhouse1_segment_5
+            name: Segment 5
+          - entity: light.wled_dollhouse1_segment_6
+            name: Segment 6
+          - entity: light.wled_dollhouse1_segment_7
+            name: Segment 7
+          - light.wled_dollhouse1
+        title: WLED-DollHouse1
+    badges: []
+  - title: Network
+    path: network
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - switch.mikrotik_chinook_ether2_port
+          - switch.mikrotik_chinook_sfp1_port
+          - binary_sensor.mikrotik_chinook_ether2_connection
+          - sensor.mikrotik_chinook_ether2_rx
+          - sensor.mikrotik_chinook_ether2_tx
+          - binary_sensor.mikrotik_chinook_sfp1_connection
+          - sensor.mikrotik_chinook_sfp1_rx
+          - sensor.mikrotik_chinook_sfp1_tx
+        title: Kitchen
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - switch.mikrotik_chinook_ether4_port
+          - binary_sensor.mikrotik_chinook_ether4_connection
+          - sensor.mikrotik_chinook_ether4_rx
+          - sensor.mikrotik_chinook_ether4_tx
+        title: Main Bedroom
+      - type: entities
+        entities:
+          - switch.mikrotik_chinook_ether3_port
+          - switch.mikrotik_chinook_ether5_port
+          - binary_sensor.mikrotik_chinook_ether3_connection
+          - sensor.mikrotik_chinook_ether3_rx
+          - sensor.mikrotik_chinook_ether3_tx
+          - binary_sensor.mikrotik_chinook_ether5_connection
+          - sensor.mikrotik_chinook_ether5_rx
+          - sensor.mikrotik_chinook_ether5_tx
+        title: TV Room
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_sstp_tn1_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_sstp_tn1_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_sstp_tn1_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_sstp_tn1_tx
+            name: TX
+        title: MikroTik - Chinook sstp-TN1
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_ether1_port
+          - entity: switch.mikrotik_chinook_ether6_port
+          - entity: switch.mikrotik_chinook_ether7_port
+          - entity: switch.mikrotik_chinook_ether8_port
+          - entity: sensor.mikrotik_chinook_ccr1009_8g_1s_cpu_load
+          - entity: sensor.mikrotik_chinook_ccr1009_8g_1s_hdd_usage
+          - entity: sensor.mikrotik_chinook_ccr1009_8g_1s_memory_usage
+          - entity: sensor.mikrotik_chinook_ccr1009_8g_1s_wired_clients
+          - entity: sensor.mikrotik_chinook_ccr1009_8g_1s_wireless_clients
+          - entity: binary_sensor.mikrotik_chinook_ether1_connection
+          - entity: sensor.mikrotik_chinook_ether1_rx
+          - entity: sensor.mikrotik_chinook_ether1_tx
+          - entity: binary_sensor.mikrotik_chinook_ether6_connection
+          - entity: sensor.mikrotik_chinook_ether6_rx
+          - entity: sensor.mikrotik_chinook_ether6_tx
+          - entity: binary_sensor.mikrotik_chinook_ether7_connection
+          - entity: sensor.mikrotik_chinook_ether7_rx
+          - entity: sensor.mikrotik_chinook_ether7_tx
+          - entity: binary_sensor.mikrotik_chinook_ether8_connection
+          - entity: sensor.mikrotik_chinook_ether8_rx
+          - entity: sensor.mikrotik_chinook_ether8_tx
+        title: Scullery
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wireguardrw_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wireguardrw_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wireguardrw_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wireguardrw_tx
+            name: TX
+        title: MikroTik - Chinook wireguardRW
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_kitchen_2g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_kitchen_2g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_kitchen_2g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_kitchen_2g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-Kitchen-2G
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_kitchen_5g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_kitchen_5g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_kitchen_5g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_kitchen_5g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-Kitchen-5G
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_room_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_room_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_room_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_room_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-Room
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_room2g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_room2g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_room2g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_room2g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-Room2G
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_room5g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_room5g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_room5g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_room5g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-Room5G
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_tv_room2g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_tv_room2g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_tv_room2g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_tv_room2g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-TV-Room2G
+      - type: entities
+        entities:
+          - entity: switch.mikrotik_chinook_wirp_tv_room5g_port
+            name: Port
+          - entity: binary_sensor.mikrotik_chinook_wirp_tv_room5g_connection
+            name: Connection
+          - entity: sensor.mikrotik_chinook_wirp_tv_room5g_rx
+            name: RX
+          - entity: sensor.mikrotik_chinook_wirp_tv_room5g_tx
+            name: TX
+        title: MikroTik - Chinook wiRP-TV-Room5G
+  - title: MODBUS
+    path: modbus
+    badges: []
+    cards:
+      - type: button
+        name: Geyser On/Off
+        show_name: true
+        show_icon: true
+        icon: mdi:heating-coil
+        tap_action:
+          action: call-service
+          service: switch.toggle
+          target:
+            entity_id: switch.geyser_on_req
+        hold_action:
+          action: call-service
+          service: switch.toggle
+          target:
+            entity_id: switch.geyser_off_req
+        entity: sensor.geyser_icon_color
+        style: |
+          ha-icon {
+            color: var(--geyser-icon-color);
+          }
+        template:
+          icon_color: |
+            {% if is_state('sensor.geyser_icon_color', 'yellow') %}
+              yellow
+            {% else %}
+              blue
+            {% endif %}
+      - type: entities
+        entities:
+          - entity: switch.geyser_on_req
+          - entity: switch.geyser_off_req
+          - entity: binary_sensor.geyser_coil
+          - entity: sensor.geyser_remaintime
+        title: Geyser Discrete Statusses
+        show_header_toggle: false
+        state_color: true
+        card_mod:
+          style: |
+            ha-card {
+              color: red;
+            }
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: sensor.geyser_icon_color
+        show_state: true
+  - type: sections
+    max_columns: 4
+    title: Weekly Planner
+    path: weekly-planner
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: New section
+          - type: custom:week-planner-card
+            calendars:
+              - entity: calendar.rayno_powell_gmail_com
+                name: RaynoP
+            days: 7
+            startingDay: today
+            startingDayOffset: 0
+            hideWeekend: false
+            noCardBackground: false
+            compact: false
+            weather:
+              showCondition: true
+              showTemperature: true
+              showLowTemperature: true
+              useTwiceDaily: false
+              entity: weather.wierdapark
+            locale: en
+            showLocation: true
+            hidePastEvents: false
+            hideDaysWithoutEvents: false
+            hideTodayWithoutEvents: false
+            combineSimilarEvents: false
+            showLegend: false
+            showNavigation: true
+            showDescription: true
+  - type: sections
+    max_columns: 4
+    title: Geyser Test
+    path: geyser-test
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: New section
+          - square: true
+            type: grid
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                entity: switch.geyser_on_req
+              - show_name: true
+                show_icon: true
+                type: button
+                entity: switch.geyser_off_req
+            columns: 2
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: none
+            entity: binary_sensor.geyser_coil
+            icon: mdi:alarm-light
+            show_state: true
+            hold_action:
+              action: none
+            grid_options:
+              columns: full
+              rows: 3
+          - type: entities
+            entities:
+              - entity: sensor.geyser_runtime
+              - entity: sensor.geyser_remaintime
+      - type: grid
+        cards:
+          - type: heading
+            heading: New section
+          - square: false
+            type: grid
+            cards:
+              - type: entities
+                entities:
+                  - entity: sensor.energy_price
+                    secondary_info: last-changed
+                  - entity: sensor.geyser_current_power
+                    secondary_info: last-changed
+                  - entity: sensor.geyser_heating_active_last_minute
+                    secondary_info: last-changed
+                  - entity: sensor.geyser_energy_last_minute
+                    secondary_info: last-changed
+                  - entity: sensor.geyser_cost_last_minute
+                    secondary_info: last-changed
+                  - entity: sensor.current_energy_costing
+                    secondary_info: last-changed
+            columns: 1
+          - type: entities
+            entities:
+              - entity: sensor.geyser_used_today
+                secondary_info: last-changed
+              - entity: sensor.geyser_daily_cost
+                secondary_info: last-changed
+              - entity: sensor.geyser_used_this_month
+                secondary_info: last-changed
+              - entity: sensor.geyser_monthly_cost
+                secondary_info: last-changed
+            state_color: false
+    header:
+      card:
+        type: markdown
+        text_only: true
+        content: |
+          # Geyser Costing Test

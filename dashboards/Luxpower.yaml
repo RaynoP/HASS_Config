@@ -1,0 +1,96 @@
+views:
+  - type: sections
+    max_columns: 4
+    title: LuxPower Menu
+    path: raw-value-update
+    sections:
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:lux-power-distribution-card
+                inverter_count: 1
+                battery_soc:
+                  entities:
+                    - sensor.lux_3113630025_battery
+                battery_discharge_live:
+                  entities:
+                    - sensor.lux_3113630025_battery_discharge_live
+                battery_charge_live:
+                  entities:
+                    - sensor.lux_3113630025_battery_charge_live
+                battery_flow:
+                  entities:
+                    - sensor.lux_3113630025_battery_flow_live
+                home_consumption:
+                  entities:
+                    - sensor.lux_3113630025_home_consumption_live
+                grid_flow:
+                  entities:
+                    - sensor.lux_3113630025_grid_flow_live
+                lux_dongle:
+                  - BA31600006
+                inverter_alias:
+                  - Inverter 1
+                battery_voltage:
+                  entities:
+                    - sensor.lux_3113630025_battery_voltage_live
+                backup_power:
+                  entities:
+                    - sensor.lux_3113630025_power_to_eps_live
+                grid_voltage:
+                  entities:
+                    - sensor.lux_3113630025_grid_voltage_live
+                update_time:
+                  entities:
+                    - sensor.lux_3113630025_data_received_time
+                  show_last_update: true
+                grid_indicator:
+                  hue: true
+                status_codes:
+                  entities:
+                    - sensor.lux_3113630025_status
+                  no_grid_is_warning: true
+                refresh_button: right
+              - features:
+                  - type: numeric-input
+                    style: buttons
+                type: tile
+                entity: input_number.current_utility_prepaid_reading_sp
+                features_position: bottom
+                vertical: false
+              - graph: line
+                type: sensor
+                entity: sensor.current_utility_prepaid_reading
+                detail: 2
+                icon: mdi:meter-electric
+                unit: kWh
+                hours_to_show: 168
+              - type: history-graph
+                entities:
+                  - entity: sensor.lux_3113630025_power_from_grid_total
+                hours_to_show: 48
+              - type: history-graph
+                entities:
+                  - entity: sensor.energy_used_this_month
+                hours_to_show: 24
+              - type: history-graph
+                entities:
+                  - entity: sensor.lux_3113630025_power_from_grid_total
+                hours_to_show: 1
+              - type: history-graph
+                entities:
+                  - entity: sensor.lux_3113630025_battery_charge_total
+      - type: grid
+        cards:
+          - type: heading
+            heading: LuxPower Menu
+    header:
+      type: grid
+      cards:
+        - type: heading
+          heading: LuxPower Menu
+      card:
+        type: markdown
+        content: '# LuxPower Menu'
+    cards: []

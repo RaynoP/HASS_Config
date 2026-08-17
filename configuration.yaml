@@ -31,6 +31,37 @@ frontend:
     - /www/community/lovelace-card-mod/card-mod.js
 
 # ########################################
+# ###              LOVELACE            ###
+# ########################################
+lovelace:
+  mode: storage          # keeps ALL your existing UI dashboards working, untouched
+  dashboards:
+    git-network:                     # internal id (must contain a hyphen)
+      mode: yaml
+      title: Network (Git)
+      icon: mdi:lan
+      show_in_sidebar: true
+      filename: dashboards/Network.yaml
+    git-geyser:                     # internal id (must contain a hyphen)
+      mode: yaml
+      title: Geyser (Git)
+      icon: mdi:water-boiler
+      show_in_sidebar: true
+      filename: dashboards/Geyser.yaml
+    git-irrigation:                     # internal id (must contain a hyphen)
+      mode: yaml
+      title: Irrigation (Git)
+      icon: mdi:waves
+      show_in_sidebar: true
+      filename: dashboards/Irrigation.yaml
+    git-luxpower:                     # internal id (must contain a hyphen)
+      mode: yaml
+      title: Luxpower (Git)
+      icon: mdi:transmission-tower-export
+      show_in_sidebar: true
+      filename: dashboards/Luxpower.yaml
+
+# ########################################
 # ###              LOGGING             ###
 # ########################################
 logbook: !include logging/logbook.yaml
@@ -231,7 +262,6 @@ input_boolean:
   expand_card:
     name: Show Stats
     icon: mdi:chevron-down
-    initial: off
 
 
 
