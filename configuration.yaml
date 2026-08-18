@@ -225,32 +225,6 @@ switch:
     mac: 00:19:d1:ec:1b:1f
     turn_off:
       service: shell_command.turn_off_remote_pc
-  - platform: template
-    switches:
-      quick_hose_status:
-        friendly_name: "Quick Hose Status"
-        unique_id: "quick_hose_status"
-        value_template: "{{ states('binary_sensor.irrigation_control_quick_hose_command') }}"
-        turn_on:
-          action: switch.turn_on
-          target: 
-            entity_id: script.set_quickhose
-        turn_off:
-          action: switch.turn_off
-          target: 
-            entity_id: script.reset_quickhose
-      quick_zone_status:
-        friendly_name: "Quick Zone Status"
-        unique_id: "quick_zone_status"
-        value_template: "{{ states('binary_sensor.irrigation_control_quick_zone_command') }}"
-        turn_on:
-          action: switch.turn_on
-          target: 
-            entity_id: script.set_quickzone
-        turn_off:
-          action: switch.turn_on
-          target: 
-            entity_id: script.reset_quickzone
 
 counter:
   warning_counter:

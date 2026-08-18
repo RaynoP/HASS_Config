@@ -37,7 +37,21 @@ sensor:
       # {{ strptime(states.sensor.esp_loadshedding_events.attributes.events[0].start, '%Y-%m-%dT%H:%M:%S%z') }}
       # {{ ((strptime(states.sensor.esp_loadshedding.attributes.events[0].start, '%Y-%m-%dT%H:%M:%S%z') - now() ).seconds/60) | int }}
         
-
+switch:
+  - name: "Quick Hose Status"
+    unique_id: "quick_hose_status"
+    state: "{{ states('binary_sensor.irrigation_control_quick_hose_command') }}"
+    turn_on:
+      action: script.set_quickhose
+    turn_off:
+      action: script.reset_quickhose
+  - name: "Quick Zone Status"
+    unique_id: "quick_zone_status"
+    state: "{{ states('binary_sensor.irrigation_control_quick_zone_command') }}"
+    turn_on:
+      action: script.set_quickzone
+    turn_off:
+      action: script.reset_quickzone
 
 
 
